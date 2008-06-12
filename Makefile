@@ -26,6 +26,7 @@ uninstall:
 	rm -f $(DESTDIR)$(bindir)/rolf
 	rm -rf $(DESTDIR)$(docdir)
 	rm -f $(DESTDIR)$(man8dir)/rolf.*
+	rm -f $(DESTDIR)$(man8dir)/ext3undel.*
 
 installdirs:
 	# Generate all required target directories (due to DESTDIR, i.e. all)

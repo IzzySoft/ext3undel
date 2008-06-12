@@ -1,0 +1,36 @@
+.TH ext3undel 8 "12 June 2008"
+.IX ext3undel
+.SH NAME
+ext3undel - collection of scripts to help restoring (accidentally) deleted files
+from ext2/ext3 file systems
+
+.SH DESCRIPTION
+ext3undel is a collection of scripts which help you to recover (accidentally)
+deleted files from ext2/ext3 file systems. If you simply want to restore
+\fBall\fR deleted files from the entire file system, you can also use tools like
+PhotoRec or foremost directly (they simply restore everything they find, and you
+can restrict by file types and file system only). Using tools like fls, fsstat
+and dls from the Sleuthkit, we can restrict further - and that's what Rolf does,
+while Ralf is just helping you to identify the device to recover from, select a
+different device to recover to, and then only runs PhotoRec or foremost
+(whichever is found on your system).
+
+.SH "FILES"
+/usr/bin/rolf
+
+/usr/bin/ralf
+
+/usr/share/doc/ext3undel/*
+
+.SH "SEE ALSO"
+http://projects.izzysoft.de/trac/ext3undel (Project page)
+
+.SH "AUTHOR" 
+.PP 
+This manual page was written by Andreas Itzchak Rehberg (devel@izzysoft.de),
+the author of the program. Permission is granted to copy, distribute and/or
+modify this document under the terms of the GNU General Public License,
+Version 2.
+
+More information may be found on the authors website, http://www.izzysoft.de/
+ 
