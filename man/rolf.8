@@ -12,11 +12,54 @@ from ext2/ext3 file systems
 
 .SH DESCRIPTION
 R.O.L.F. is a wrapper to a collection of tools needed for successfully recovery
-of files deleted from ext2/ext3 file systems. If you simply want to restore \fBall\fR
-deleted files from the entire file system, you better use tools like PhotoRec or
-foremost directly (they simply restore everything they find, and you can restrict
-by file types and file system only). Using tools like fls, fsstat and dls from the
-Sleuthkit, we can restrict further - and that's what Rolf does.
+of files deleted from ext2/ext3 file systems. If you simply want to restore
+\fBall\fR deleted files from the entire file system, you better use tools like
+PhotoRec or foremost directly (they simply restore everything they find, and you
+can restrict by file types and file system only). Using tools like fls, fsstat
+and dls from the Sleuthkit, we can restrict further - and that's what Rolf does.
+
+Recovery of lost files from ext2/ext3 file systems is not that easy, and
+requires multiple steps. R.O.L.F. automates these steps, thus speeding up the
+recovery process. Based on the file name you provide on the command line,
+R.O.L.F.
+.TP 2
+-
+checks on which device the file has been, selecting this as "Source Device"
+.TP 2
+-
+asks the user to specify a device other than the source to restore to.
+Restauration must be done on a different device, to prevent the data from
+being overwritten during the restauration process
+.TP 2
+-
+finds the range of file system blocks the file belongs to, and copies these
+blocks to an image file on the target device
+.TP 2
+-
+runs PhotoRec (or foremost) to extract all files found in this image. We need to
+extract them all, since we cannot tell which one is the correct file
+.P
+Once the script has completed its tasks, it tells you the location where the
+recovered files are stored. Now the only task left to you is to finally identify
+the wanted file - and remove the rest (if not needed).
+
+However, keep in mind that R.O.L.F. may fail - which can be due to different
+reasons:
+.TP 2
+-
+The data blocks (or even iNode) may already have been re-occupied by a newer file
+.TP 2
+-
+file system corruption could be present
+.TP 2
+-
+the script itself may be full of bugs...
+.P
+So we can give no guarantee but that the script (and its required components)
+consume additional space on one of your disks, once you have them installed.
+You use it at your own risk - the authors cannot be made responsible for any
+negative results, damages, etc.pp. (you find these details in the license
+information, installed to the docs directory).
 
 .SH OPTIONS
 .IP \fB--help\fR
