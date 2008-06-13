@@ -1,0 +1,23 @@
+#!/bin/bash
+#==============================================================================
+# ext3undel                              (c) 2008 by Itzchak Rehberg & IzzySoft
+#------------------------------------------------------------------------------
+# ext3undel is a wrapper to the scripts of the package ext3undel - so you need
+# not to remember which of the scripts to call
+#==============================================================================
+# $Id$
+
+case "$1" in
+  "-h"|"--help"|"-?")
+    echo
+    echo "Syntax:"
+    echo "  $0 [--help | <filename>]"
+    echo
+    ;;
+  "")
+    gabi
+    ;;
+  *)
+    ralf $@
+    ;;
+esac

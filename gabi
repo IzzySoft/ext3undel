@@ -1,7 +1,6 @@
 #!/bin/bash
-#!/bin/bash
 #==============================================================================
-# G.A.B.I. (Get All Back Immediatly)
+# G.A.B.I. (Get All Back Immediatly)     (c) 2008 by Itzchak Rehberg & IzzySoft
 #------------------------------------------------------------------------------
 # Gabi is just a shell script that wraps around PhotoRec (or foremost -
 # depending on what is found on your system) to help you restoring all
@@ -13,6 +12,7 @@
 # PhotoRec: http://www.cgsecurity.org/wiki/PhotoRec
 # foremost: http://foremost.sourceforge.net/
 #==============================================================================
+# $Id$
 
 #==========================================================[ Configuration ]===
 #-------------------------------------------------[ File Systems and Paths ]---

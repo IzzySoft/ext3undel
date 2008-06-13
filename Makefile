@@ -17,7 +17,7 @@ man5dir=$(mandir)/man5
 man8dir=$(mandir)/man8
 
 install: installdirs
-	$(INSTALL) -c rolf $(DESTDIR)$(bindir)
+	$(INSTALL) -c ralf gabi ext3undel $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) -c doc/* $(DESTDIR)$(docdir)
 	gzip man/*
 	$(INSTALL_DATA) -c man/*.8* $(DESTDIR)$(man8dir)
@@ -25,6 +25,7 @@ install: installdirs
 uninstall:
 	rm -f $(DESTDIR)$(bindir)/ralf
 	rm -f $(DESTDIR)$(bindir)/gabi
+	rm -f $(DESTDIR)$(bindir)/ext3undel
 	rm -rf $(DESTDIR)$(docdir)
 	rm -f $(DESTDIR)$(man8dir)/ralf.*
 	rm -f $(DESTDIR)$(man8dir)/gabi.*
