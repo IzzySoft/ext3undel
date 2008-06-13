@@ -23,9 +23,9 @@ install: installdirs
 	$(INSTALL_DATA) -c man/*.8* $(DESTDIR)$(man8dir)
 
 uninstall:
-	rm -f $(DESTDIR)$(bindir)/rolf
+	rm -f $(DESTDIR)$(bindir)/ralf
 	rm -rf $(DESTDIR)$(docdir)
-	rm -f $(DESTDIR)$(man8dir)/rolf.*
+	rm -f $(DESTDIR)$(man8dir)/ralf.*
 	rm -f $(DESTDIR)$(man8dir)/ext3undel.*
 
 installdirs:

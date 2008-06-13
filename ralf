@@ -1,9 +1,9 @@
 #!/bin/bash
 #==============================================================================
-# R.O.L.F. (Recover One Lost File)
+# R.A.L.F. (Recover A Lost File)
 # Syntax: $0 <filename>
 #------------------------------------------------------------------------------
-# Rolf is just a shell script that automates the manual steps required to
+# Ralf is just a shell script that automates the manual steps required to
 # restore a (accidentally) deleted file from a modern ext2/ext3 file system.
 # For other *nix file systems there may be easier solutions - though Rolf
 # should also be able to handle them, as long as they work with iNodes.

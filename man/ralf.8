@@ -1,27 +1,27 @@
-.TH rolf 8 "12 June 2008"
-.IX rolf
+.TH ralf 8 "12 June 2008"
+.IX ralf
 .SH NAME
-R.O.L.F. - Recover One Lost File, a tool to undelete an (accidentally) deleted file
+R.A.L.F. - Recover One Lost File, a tool to undelete an (accidentally) deleted file
 from ext2/ext3 file systems
 
 .SH SYNOPSIS
-.B rolf
+.B ralf
 .RB \fIfileName\fR
 
-\fBrolf --help\fR
+\fBralf --help\fR
 
 .SH DESCRIPTION
-R.O.L.F. is a wrapper to a collection of tools needed for successfully recovery
+R.A.L.F. is a wrapper to a collection of tools needed for successfully recovery
 of files deleted from ext2/ext3 file systems. If you simply want to restore
 \fBall\fR deleted files from the entire file system, you better use tools like
 PhotoRec or foremost directly (they simply restore everything they find, and you
 can restrict by file types and file system only). Using tools like fls, fsstat
-and dls from the Sleuthkit, we can restrict further - and that's what Rolf does.
+and dls from the Sleuthkit, we can restrict further - and that's what Ralf does.
 
 Recovery of lost files from ext2/ext3 file systems is not that easy, and
-requires multiple steps. R.O.L.F. automates these steps, thus speeding up the
+requires multiple steps. R.A.L.F. automates these steps, thus speeding up the
 recovery process. Based on the file name you provide on the command line,
-R.O.L.F.
+R.A.L.F.
 .TP 2
 -
 checks on which device the file has been, selecting this as "Source Device"
@@ -43,7 +43,7 @@ Once the script has completed its tasks, it tells you the location where the
 recovered files are stored. Now the only task left to you is to finally identify
 the wanted file - and remove the rest (if not needed).
 
-However, keep in mind that R.O.L.F. may fail - which can be due to different
+However, keep in mind that R.A.L.F. may fail - which can be due to different
 reasons:
 .TP 2
 -
@@ -71,7 +71,7 @@ Some basic configuration can be done inside the script, where you will find the
 they do.
 
 .SH MESSAGES AND EXIT CALLS
-R.O.L.F. uses exit codes according to the Linux specifications (see
+R.A.L.F. uses exit codes according to the Linux specifications (see
 http://rute.2038bug.com/node7.html.gz, section 4.2). Basically these are here:
 
 .TP
@@ -93,7 +93,7 @@ Except for those, error codes from other programs called (such as PhotoRec or
 foremost) are simply returned by the script as well.
 
 .SH "FILES"
-/usr/bin/rolf
+/usr/bin/ralf
 
 /usr/share/doc/ext3undel/*
 

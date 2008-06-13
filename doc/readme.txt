@@ -33,8 +33,8 @@ contents of this archive may only be distributed all together.
 2) Requirements
 ---------------
 
-Dependencies are slightly different for the contained script. So for R.A.L.F.
-you will need PhotoRec (or foremost) only, while R.O.L.F. additionally requires
+Dependencies are slightly different for the contained script. So for G.A.B.I.
+you will need PhotoRec (or foremost) only, while R.A.L.F. additionally requires
 some executables from the Sleuthkit (namely fls, fsstat and dls). All other
 requirements are essentially and should be available on all systems: Bash, Awk,
 and things like that.
@@ -78,7 +78,7 @@ take you hours to sort out).
 However, iNodes are organized in groups, and each of these groups have a known
 group of data blocks they keep the information for. So if we could figure out
 the iNode our file occupied once, we can restrict our restore process to that
-group of blocks - that is what R.O.L.F. does with the help of Sleuthkit: The
+group of blocks - that is what R.A.L.F. does with the help of Sleuthkit: The
 'fls' executable lists up all iNodes together with the MetaData (which we grep
 for the file name, so we get the iNode number). 'fsstat' lists up all iNode
 groups together with their associated data blocks (which we grep for the iNode
@@ -87,9 +87,9 @@ file system, and stores them to an image. Now we can tell PhotoRec (or foremost)
 to scan that image (instead of the complete file system), and our result is
 much closer to what we seek.
 
-Opposite to R.O.L.F., R.A.L.F. is designed to get all files from a given disk
-(partition). You might not need R.A.L.F, but could use PhotoRec or foremost
-directly instead - all R.A.L.F. does is to save you from selecting the command
+Opposite to R.A.L.F., G.A.B.I. is designed to get all files from a given disk
+(partition). You might not need G.A.B.I., but could use PhotoRec or foremost
+directly instead - all G.A.B.I. does is to save you from selecting the command
 line switches/options, and ensuring that you recover to a disk/partition other
 than the original data are on, to avoid more destruction before the recovery
 has been done.

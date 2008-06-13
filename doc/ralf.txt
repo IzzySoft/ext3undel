@@ -1,10 +1,10 @@
 #==============================================================================
-# R.O.L.F. (Recover One Lost File)
+# R.A.L.F. (Recover A Lost File)
 # Syntax: $0 <filename>
 #------------------------------------------------------------------------------
-# Rolf is just a shell script that automates the manual steps required to
+# Ralf is just a shell script that automates the manual steps required to
 # restore a (accidentally) deleted file from a modern ext2/ext3 file system.
-# For other *nix file systems there may be easier solutions - though Rolf
+# For other *nix file systems there may be easier solutions - though Ralf
 # should also be able to handle them, as long as they work with iNodes.
 #------------------------------------------------------------------------------
 # Requires: photorec OR foremost
@@ -13,7 +13,7 @@
 
 Introduction
 ============
-The concept of Rolf is based on an article I found in the InterNet - while
+The concept of Ralf is based on an article I found in the InterNet - while
 looking for a way to recover (accidentally) deleted files from Ext2/Ext3
 file systems (see
 http://www.lonerunners.net/blog/archives/1056-How-to-recover-data-and-deleted-files-from-Ext3-partitions.html)
@@ -49,7 +49,7 @@ signatures, to identify the file type and, hopefully, restore the file. But
 on a large disk, this will restore a lot of files - so we somehow need to
 restrict the search area.
 
-If we know the file name, we can do so - and this is where Rolf (and the
+If we know the file name, we can do so - and this is where Ralf (and the
 concept from that web page) come into play:
 
 fls   : This helper scans the iNode information, and its output contains
@@ -72,9 +72,9 @@ Since we do not know which of them belonged to what iNode, we cannot
 automatically tell which is the file we wanted to restore - but that's
 nothing of a problem, compared to the alternative: The file lost completely...
 
-R.O.L.F.
+R.A.L.F.
 ========
-So what does Rolf do? It simply automatizes the steps you also could do
+So what does Ralf do? It simply automatizes the steps you also could do
 manually:
 * find the correct file system and adjust the file name, so we know how to
   call fls and what to search for in its output
@@ -82,6 +82,6 @@ manually:
 * call dls and extract the correct data blocks
 * call PhotoRec / foremost and extract the content of the image
 
-So instead of doing all those steps manually, you just call Rolf with the
-name of the file to recover - and Rolf does the job. The only thing left to
+So instead of doing all those steps manually, you just call Ralf with the
+name of the file to recover - and Ralf does the job. The only thing left to
 you is: Evaluate the results, and rename your file.

@@ -1,0 +1,308 @@
+#!/bin/bash
+#!/bin/bash
+#==============================================================================
+# G.A.B.I. (Get All Back Immediatly)
+#------------------------------------------------------------------------------
+# Gabi is just a shell script that wraps around PhotoRec (or foremost -
+# depending on what is found on your system) to help you restoring all
+# files from an ext2/ext3 file system you may have (accidentally) deleted.
+# It will probably work for other file systems as well.
+#------------------------------------------------------------------------------
+# Requires: photorec OR foremost
+#------------------------------------------------------------------------------
+# PhotoRec: http://www.cgsecurity.org/wiki/PhotoRec
+# foremost: http://foremost.sourceforge.net/
+#==============================================================================
+
+#==========================================================[ Configuration ]===
+#-------------------------------------------------[ File Systems and Paths ]---
+# We don't save anything in the TMPDIR - we just need a place where to create
+# named pipes
+TMPDIR=/tmp
+# Some named pipes for IPC
+MNTFILE=${TMPDIR}/undel_FIFO
+# directory name to recover to. Name is used relative to the target file systems
+# mount point - so no leading slash here (and no trailing slash either)!
+RESTDIR=recover
+
+#-------------------------------------------------------[ foremost options ]---
+# Though we prefer to use PhotoRec, foremost is used as a fallback solution
+# if the PhotoRec executable cannot be found:
+USETS=1
+USEQUICK=1
+USEQUIET=0
+READONLY=0
+VERBOSE=1
+ALLHEAD=1
+
+# photorec is prefered over foremost - if found:
+RECOPROG=photorec
+
+# one thing for both, PhotoRec AND foremost: default file type to restore
+FILESPEC="everything"
+
+#===================================================[ Helper / SubRoutines ]===
+shopt -s extglob
+trap "cleanUp ; exit 2" 2 3 15
+#-----------------------------------[ Check whether we are running as root ]---
+function checkRoot() {
+  local uid=`id -u`
+  [ $uid -gt 0 ] && {
+    echo "This script must be run as root (or at least with sudo)."
+    exit 1
+  }
+}
+
+#-------------------------------[ Make sure needed binaries exist in $PATH ]---
+function checkBins() {
+  [ "$RECOPROG" = "photorec" -a -z "`which photorec`" ] && RECOPROG=foremost
+  [ "$RECOPROG" = "foremost" -a -z "`which foremost`" ] && {
+    echo
+    echo "Neither the 'photorec' nor the 'foremost' executable could be found"
+    echo "in your \$PATH - but we need one of them. They usually ship in a"
+    echo "package with the same name (i.e. 'photorec' or 'foremost')."
+    echo
+    exit 2
+  }
+  FLS=1
+  [ -z "`which fls`" ] && {
+    FLS=0
+    echo
+    echo "Could not find the 'fls' executable. This is not crucial - but without it"
+    echo "we cannot list up file names. Your 'lost files' still will be recovered with"
+    echo "a cryptic name (which is done by 'foremost') - but we cannot give you any"
+    echo "hint on how it may have been named before. If you want these hints, please"
+    echo "install sleuthkit."
+    echo
+  }
+}
+
+#-------------------------------------------[ Print header for Mount Table ]---
+function printMountTabHead() {
+  echo
+  printf "%2s| %-7s| %-15s| %-32s| %-16s\n" "ID" "Type" "Device" "MountPoint" "Size"
+  echo "--+--------+----------------+---------------------------------+----------------"
+}
+
+#-----------------------------------------------[ Select Source MountPoint ]---
+function selSrc() {
+  echo
+  echo "Please select the ID of the FileSystem to recover from:"
+  printMountTabHead
+  typeset -i i=0
+  mounts[0]=""
+  mkfifo $MNTFILE
+  df -h -l -T >$MNTFILE &
+  while read line; do
+    if [[ "$line" == /dev* ]]; then # skip pseudo filesystems
+      i+=1
+      echo "$i $line"|awk '{printf "%2d| %-7s| %-15s| %-32s| %-16s\n", $1, $3, $2, $8, $4 }'
+      mounts[$i]=`echo $line|awk '{print $1}'`
+      uFSTYPE[$i]=`echo $line|awk '{print $2}'`
+    fi
+  done<$MNTFILE
+  rm -f $MNTFILE
+  echo
+  read -p "ID: " SRC_ID
+  echo
+  recoFrom=${mounts[$SRC_ID]}
+  FSTYPE=${uFSTYPE[$SRC_ID]}
+}
+
+#-------------------------------------------[ Select Destination directory ]---
+function selDest() {
+  local rd
+  echo
+  echo "Please select the file system to store the recovered files to."
+  echo "(This must be on a different device than you restore from)"
+  printMountTabHead
+  typeset -i i=0
+  mkfifo $MNTFILE
+  df -h -l -T >$MNTFILE &
+  while read line; do
+    if [[ "$line" == /dev* ]]; then # skip pseudo filesystems
+      i+=1
+      [ $i -ne $SRC_ID ] && echo "$i $line"|awk '{printf "%2d| %-7s| %-15s| %-32s| %-16s\n", $1, $3, $2, $8, $4 }'
+      stores[$i]=`echo $line|awk '{print $7}'`
+    fi
+  done<$MNTFILE
+  rm -f $MNTFILE
+  read -p "Destination ID: " rd
+  if [ "$rd" = "$recoFrom" ]; then
+    echo "Invalid selection: Source and Target file systems must not be identical!"
+    echo "This way you may destroy your lost data permanently. Are you sure to"
+    read -n 1 -p "proceed (y/n)? " ready
+    echo
+    ready=`echo $ready|tr [:upper:] [:lower:]`
+    if [ "$ready" = "y" -o "$ready" = "j" ]; then
+      recoTo=${stores[$rd]}/$RESTDIR
+    else
+      echo "Aborting on user request."
+      cleanUp
+      exit 0
+    fi
+  else
+    recoTo=${stores[$rd]}/$RESTDIR
+  fi
+  echo
+}
+
+#----------------------------------------------[ Select File Specification ]---
+function selFSpec() {
+  local rd
+  echo
+  echo "Please specify the type of file(s) to recover. This is usually the"
+  echo "extension of the file (jpg, wav, mpg) or 'everything'."
+  read -p "FileSpec ($FILESPEC): " rd
+  [ -n "$rd" ] && FILESPEC="$rd"
+  echo
+}
+
+#--------------------------------------------------------[ Output progress ]---
+function li1() {
+  echo "* $1"
+}
+
+#-----------------------------------------------[ Print yes/no for boolean ]---
+function printYN() {
+  if [ $2 -eq 1 ]; then
+    echo "$1: Yes"
+  else
+    echo "$1: No"
+  fi
+}
+
+#----------------------------------------------------------------[ CleanUp ]---
+function cleanUp() {
+  echo
+  li1 "Cleaning up..."
+  rm -f $MNTFILE
+}
+
+#------------------------------------------------[ List possible FileNames ]---
+function listNames() {
+  [ $FLS -eq 0 ] && return
+  echo
+  echo "Unfortunately, we cannot automatically obtain the name of a deleted file"
+  echo "from an Ext3 file system - since the connection between the iNode (which"
+  echo "holds the MetaData, including the file name) and the real data is dropped"
+  echo "on deletion. However, we can obtain a list of names from the deleted files."
+  read -n 1 -p "Do you want to display a list of possible file names (y/n)? " ready
+  echo
+  ready=`echo $ready|tr [:upper:] [:lower:]`
+  if [ "$ready" = "y" -o "$ready" = "j" ]; then
+    cmd="fls -r -d $recoFrom |grep -v '(realloc)'|grep 'r/r'"
+    [ "$FILESPEC" != "everything" ] && cmd="$cmd |grep '.$FILESPEC'"
+    echo
+    echo "Running: $cmd"
+    echo
+    eval $cmd
+  else
+    echo "OK - skipping file list..."
+  fi
+}
+
+#---------------------------------------------------[ Get PhotoRec Version ]---
+function photoRecVer() {
+  local TMP="${TMPDIR}/undel_xFIFO.$$"
+  mkfifo $TMP
+  photorec --help>$TMP &
+  while read line; do
+    local ver=`echo $line|awk '{print $2}'`
+    break
+  done<$TMP
+  pr_maj=${ver%.*}
+  pr_min=${ver#*.}
+  pr_min=${pr_min%,*}
+  rm -f $TMP
+}
+
+#=================================================[ Setting up the command ]===
+checkRoot
+checkBins
+
+#-------------------------------------------------------------[ User Input ]---
+selSrc
+selDest
+selFSpec
+cleanUp
+
+#-----------------------------------------------------[ Setting up Options ]---
+case "$RECOPROG" in
+  "foremost")
+    li1 "Using foremost"
+    cmd="foremost "
+    [ $USEQUICK -eq 1 ] && cmd="$cmd -q"
+    [ $USETS -eq 1 ] && cmd="$cmd -T"
+    [ $USEQUIET -eq 1 ] && cmd="$cmd -Q"
+    [ $READONLY -eq 1 ] && cmd="$cmd -w"
+    [ $VERBOSE -eq 1 ] && cmd="$cmd -v"
+    [ $ALLHEAD -eq 1 ] && cmd="$cmd -a"
+    if [ "$FILESPEC" = "everything" ]; then
+      cmd="$cmd -t all -o $recoTo $recoFrom"
+    else
+      cmd="$cmd -t $FILESPEC -o $recoTo $recoFrom"
+    fi
+    ;;
+  "photorec")
+    photoRecVer
+    li1 "Using PhotoRec v${pr_maj}.${pr_min}"
+    cmd="photorec /d $recoTo /cmd $recoFrom partition_i386"
+    [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
+    if [ $pr_maj -gt 6 -o $pr_min -ge 9 ]; then
+      cmd="${cmd},fileopt"
+      if [ "$FILESPEC" != "everything" ]; then
+        cmd="${cmd},everything,disable,$FILESPEC,enable,search"
+      else
+        cmd="${cmd},everything,enable,search"
+      fi
+    else
+      [ "$FILESPEC" != "everything" ] && cmd="${cmd},fileopt,$FILESPEC,enable"
+      cmd="${cmd},search"
+    fi
+    ;;
+  *) echo "Ooops - no recovery tool specified???"
+     echo "You normally should not see this message - there seems to be some bug in the script..."
+    ;;
+esac
+
+#=============================================================[ Go for it! ]===
+#------------------------------------------------------[ Last confirmation ]---
+li1 "Recovering files of type '$FILESPEC' from '$recoFrom' to '$recoTo'."
+li1 "File System on source drive: '$FSTYPE'."
+[ "$RECOPROG" = "foremost" ] && {
+  li1 "Special settings:"
+  echo
+  printYN "Quick Mode" $USEQUICK
+  printYN "TimeStamped Directories" $USETS
+  printYN "Be Quiet" $USEQUIET
+  printYN "Log Only (w/o restore)" $READONLY
+  printYN "Verbose Mode" $VERBOSE
+  printYN "Print All Headers" $ALLHEAD
+}
+echo
+li1 "Prepared command:"
+echo "  $cmd"
+echo
+
+read -n 1 -p "Ready to go (y/n)? " ready
+echo
+echo
+ready=`echo $ready|tr [:upper:] [:lower:]`
+if [ "$ready" = "y" -o "$ready" = "j" ]; then
+  echo "Please be patient - this may take some time (or even longer on large devices)..."
+  echo
+  $cmd
+  rc=$?
+  if [ $rc -ne 0 ]; then
+    echo
+    echo "Looks like we had no success: foremost exited with code $rc, sorry..."
+    exit $rc
+  else
+    listNames
+  fi
+else
+  echo "User requested to abort - so we quit and do nothing."
+  cleanUp
+  exit 0
+fi
