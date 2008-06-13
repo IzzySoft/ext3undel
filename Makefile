@@ -24,8 +24,10 @@ install: installdirs
 
 uninstall:
 	rm -f $(DESTDIR)$(bindir)/ralf
+	rm -f $(DESTDIR)$(bindir)/gabi
 	rm -rf $(DESTDIR)$(docdir)
 	rm -f $(DESTDIR)$(man8dir)/ralf.*
+	rm -f $(DESTDIR)$(man8dir)/gabi.*
 	rm -f $(DESTDIR)$(man8dir)/ext3undel.*
 
 installdirs:

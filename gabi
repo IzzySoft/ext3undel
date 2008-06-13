@@ -77,6 +77,15 @@ function checkBins() {
   }
 }
 
+#--------------------------------------------------[ Display help and exit ]---
+function syntax() {
+  echo
+  echo "Syntax:"
+  echo "  $0 [--help]"
+  echo
+  exit 0
+}
+
 #-------------------------------------------[ Print header for Mount Table ]---
 function printMountTabHead() {
   echo
@@ -220,6 +229,10 @@ function photoRecVer() {
 #=================================================[ Setting up the command ]===
 checkRoot
 checkBins
+case "$1" in
+  "-h"|"--help"|"-?") syntax;;
+  ;;
+esac
 
 #-------------------------------------------------------------[ User Input ]---
 selSrc

@@ -1,0 +1,70 @@
+.TH gabi 8 "13 June 2008"
+.IX gabi
+.SH NAME
+G.A.B.I. - Get All Back Immediately - is a tool to undelete an (accidentally)
+deleted files from ext2/ext3 file systems
+
+.SH SYNOPSIS
+.B gabi
+
+\fBgabi --help\fR
+
+.SH DESCRIPTION
+G.A.B.I. is a wrapper to either PhotoRec or foremost (whichever is found on
+your system). Though you could use any of these both programs directly, Gabi
+at least eases dealing with command line parameters for foremost.
+
+Another benefit is that Gabi helps you locating the device (in opposite to the
+directory) the lost files reside on, and hands this devices name, together with
+some other options, to the called tool (i.e. PhotoRec or foremost) - after
+making sure the user selected a device different than this to store the
+recovered files to.
+
+.SH "CONFIGURATION"
+Some basic configuration can be done inside the script, where you will find the
+"[ Configuration ]" section at the top - together with a description on what
+they do.
+
+.SH MESSAGES AND EXIT CALLS
+G.A.B.I. uses exit codes according to the Linux specifications (see
+http://rute.2038bug.com/node7.html.gz, section 4.2). Basically these are here:
+
+.TP
+Code
+Description
+.TP
+0
+Everything went fine - or the user (= you) decided to answer "N" to some question
+on whether to continue
+.TP
+1
+Operation not permitted (e.g. script run without root privileges)
+.TP
+2
+Some file was not found
+
+.P
+Except for those, error codes from other programs called (such as PhotoRec or
+foremost) are simply returned by the script as well.
+
+.SH "FILES"
+/usr/bin/gabi
+
+/usr/share/doc/ext3undel/*
+
+.SH "SEE ALSO"
+ralf(8)
+
+ext3undel(8)
+
+http://projects.izzysoft.de/trac/ext3undel (Project page)
+
+.SH "AUTHOR" 
+.PP 
+This manual page was written by Andreas Itzchak Rehberg (devel@izzysoft.de),
+the author of the program. Permission is granted to copy, distribute and/or
+modify this document under the terms of the GNU General Public License,
+Version 2.
+
+More information may be found on the authors website, http://www.izzysoft.de/
+ 

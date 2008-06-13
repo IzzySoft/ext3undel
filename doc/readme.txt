@@ -120,7 +120,7 @@ you may do so if you want to.
 Calling either script with the parameter "--help" will reveal this information.
 
 After successfully installing the package, more information can also be found
-calling "man rolf" and "man ralf".
+calling "man gabi" and "man ralf".
 
 ===============================================================================
 
