@@ -57,7 +57,7 @@ The short description above already said it: It's two scripts to help you
 recovering files you (accidentally) deleted from some ext2/ext3 formatted
 drive.
 
-Though most pages in the InterNet state it is impossible to delete such files,
+Though most pages in the InterNet state it is impossible to undelete such files,
 this is simply wrong. Just think of all the forensic people - it is their
 daily work. Correct is: It is not that easy as to simply take them out of some
 trash folder. The ext2/ext3 file system stores the MetaData (i.e. the file name,
