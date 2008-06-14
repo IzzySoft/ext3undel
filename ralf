@@ -121,7 +121,7 @@ function selDest() {
     if [[ "$line" == /dev* ]]; then # skip pseudo filesystems
       i+=1
       devs[$i]=`echo $line|awk '{print $1}'`
-      [ ${devs[$i]} != $DEV ] && echo "$i $line"|awk '{printf "%2d| %-7s| %-15s| %-32s| %-16s\n", $1, $3, $2, $8, $4 }'
+      [ "${devs[$i]}" != "$DEV" ] && echo "$i $line"|awk '{printf "%2d| %-7s| %-15s| %-32s| %-16s\n", $1, $3, $2, $8, $4 }'
       stores[$i]=`echo $line|awk '{print $7}'`
     fi
   done<$MNTFILE
@@ -181,7 +181,7 @@ function selSrc() {
   done<$MNTFILE
   sort -n -r <$TMP>$MNTFILE &
   while read line; do
-    if [[ "$uFILE" == $line/* ]]; then
+    if [[ "$uFILE" == $line* ]]; then
       i=0
       while (( i < ${#uMOUNT[*]} )); do
         if [[ "$line" = "${uMOUNT[$i]}" ]]; then
@@ -297,6 +297,8 @@ function fileRestore() {
 }
 
 function cleanUp() {
+  li1 "Cleaning up..."
+  echo
   rm -f $TMP $MNTFILE $DUMPFILE
   echo
 }
@@ -311,6 +313,13 @@ case "$1" in
   ;;
 esac
 selSrc
+[ -z "$DEV" ] && {
+  echo
+  echo "Sorry - something went wrong, could not determine the source device."
+  echo
+  cleanUp
+  exit 19
+}
 selDest
 if [ -n "$STORETO" ]; then
   DUMPFILE=${STORETO}/dump.$$
@@ -322,7 +331,7 @@ else
   exit 2
 fi
 splitFileName
-li1 "Searching for iNode"
+li1 "Searching for iNode on '$DEV'..."
 mkfifo $TMP
 #echo "fls -r -d $DEV|grep -v '(realloc)'|grep 'r/r'|grep '$SEARCH'"
 fls -r -d $DEV|grep -v "(realloc)"|grep "r/r"|grep "$SEARCH">$TMP &
@@ -335,9 +344,13 @@ while read line; do
 done <$TMP
 rm -f $TMP
 i=0
-while (( i < ${#iNODE[*]} )); do
-  fileRestore ${iFILE[$i]} ${iNODE[$i]}
-  i+=1
-done
+if [ ${#iNODE[*]} -eq 0 ]; then
+  li1 "Sorry - no match found in iNode list. Only chance left is G.A.B.I...."
+else
+  while (( i < ${#iNODE[*]} )); do
+    fileRestore ${iFILE[$i]} ${iNODE[$i]}
+    i+=1
+  done
+fi
 cleanUp
 exit 0
