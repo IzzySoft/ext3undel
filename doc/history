@@ -3,6 +3,10 @@ $Id$
 History for ext3undel
 =====================
 
+v0.1.1
+-------------------
+! syntax error in gabi caused the script to always abort
+
 v0.1.0 (14.06.2008)
 -------------------
 * first public version

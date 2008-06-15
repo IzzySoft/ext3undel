@@ -231,6 +231,7 @@ checkRoot
 checkBins
 case "$1" in
   "-h"|"--help"|"-?") syntax;;
+  *)
   ;;
 esac
 
