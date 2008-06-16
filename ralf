@@ -36,7 +36,8 @@ READONLY=0
 VERBOSE=1
 ALLHEAD=1
 
-# photorec is prefered over foremost - if found:
+# photorec is prefered over foremost - if found. If you prefer foremost, set
+# RECOPROG=foremost
 RECOPROG=photorec
 
 #===================================================[ Helper / SubRoutines ]===
@@ -276,12 +277,15 @@ function fileRestore() {
 	    esac
 	    if [ $rc -eq 0 ]; then
 	      echo
-	      echo "Your file has been successfully recovered to the following location:"
+	      echo "All recoverable files from the data block range where the requested"
+	      echo "file had been stored in have been reconstructed and stored into"
 	      echo "  ${STORETO}/$RESTDIR"
-	      echo "You still have to rename it and place it where you want it to be..."
+	      echo "(if you used PhotoRec, you have to add '.#' to this path, where '#'"
+	      echo "is a number). You still have to check these files manually, and"
+	      echo "to rename/copy those you want to where you want them."
 	    else
 	      echo "Ooops! It looks like $RECOPROG failed to recover your file. So we will"
-	      echo "exit as well now..."
+	      echo "exit as well now - with the exit code $RECPROG gave us..."
 	      cleanUp
 	      exit $rc
 	    fi
@@ -290,7 +294,7 @@ function fileRestore() {
         fi
       fi
     done<$TMP
-    [ $range -eq 0 ] && li1 "Sorry - looks like we could not recover anything..."
+    [ $range -eq 0 ] && li1 "Could not determine data block range - so no restore, sorry..."
   else
     echo "No Restore."
   fi
