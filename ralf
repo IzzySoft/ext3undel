@@ -313,7 +313,10 @@ checkBins
 [ -z "$1" ] && syntax
 case "$1" in
   "-h"|"--help"|"-?") syntax;;
-  *) fileName $1
+  *)
+     set -f
+     fileName "$1"
+     set +f
   ;;
 esac
 selSrc
@@ -337,8 +340,8 @@ fi
 splitFileName
 li1 "Searching for iNode on '$DEV'..."
 mkfifo $TMP
-#echo "fls -r -d $DEV|grep -v '(realloc)'|grep 'r/r'|grep '$SEARCH'"
-fls -r -d $DEV|grep -v "(realloc)"|grep "r/r"|grep "$SEARCH">$TMP &
+#echo "fls -r -d -p $DEV|grep -v '(realloc)'|grep 'r/r'|egrep '$SEARCH'"
+fls -r -d -p $DEV|grep -v "(realloc)"|grep "r/r"|egrep "$SEARCH">$TMP &
 typeset -i i=0
 while read line; do
   iNODE[$i]=`echo "'$line'"|awk '{print $3}'`
