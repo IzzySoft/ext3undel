@@ -93,6 +93,42 @@ function printMountTabHead() {
   echo "--+--------+----------------+---------------------------------+----------------"
 }
 
+#---------------------------------------------[ Read a number (user input) ]---
+# $1: Prompt message
+# opt $2: Min
+# opt $3: Max
+function readnum() {
+  read -p "$1" rd
+  local tn=`echo $rd|sed 's/[0-9]//g'`
+  local min=$2
+  local max=$3
+  [ -n "$tn" ] && {
+    echo "Please enter only digits!"
+    readnum "$1" "$2" "$3"
+  }
+  [ -z "$min" ] && min=0
+  [ -z "$max" ] && max=99999999
+  [ $rd -lt $min -o $rd -gt $max ] && {
+    echo "Please enter a number between $2 and $3!"
+    readnum "$1" "$2" "$3"
+  }
+}
+
+#---------------------------------------------------------[ Read Y/N input ]---
+function readyn() {
+  read -n 1 rd
+  echo
+  rd=`echo $rd|tr [:upper:] [:lower:]`
+  if [ "$rd" = "y" -o "$rd" = "j" ]; then
+    rd=1
+  elif [ "$rd" = "n" ]; then
+    rd=0
+  else
+    echo -n "Please enter 'y' for 'yes', 'n' for 'no' - or press Ctrl-C to abort: "
+    readyn
+  fi
+}
+
 #-----------------------------------------------[ Select Source MountPoint ]---
 function selSrc() {
   echo
@@ -112,7 +148,8 @@ function selSrc() {
   done<$MNTFILE
   rm -f $MNTFILE
   echo
-  read -p "ID: " SRC_ID
+  readnum "ID: " 1 $i
+  SRC_ID=$rd
   echo
   recoFrom=${mounts[$SRC_ID]}
   FSTYPE=${uFSTYPE[$SRC_ID]}
@@ -136,14 +173,14 @@ function selDest() {
     fi
   done<$MNTFILE
   rm -f $MNTFILE
-  read -p "Destination ID: " rd
-  if [ "$rd" = "$recoFrom" ]; then
+  readnum "Destination ID: " 1 $i
+  if [ $rd -eq $SRC_ID ]; then
     echo "Invalid selection: Source and Target file systems must not be identical!"
     echo "This way you may destroy your lost data permanently. Are you sure to"
-    read -n 1 -p "proceed (y/n)? " ready
+    echo -n "proceed (y/n)? "
+    readyn
     echo
-    ready=`echo $ready|tr [:upper:] [:lower:]`
-    if [ "$ready" = "y" -o "$ready" = "j" ]; then
+    if [ $rd -eq 1 ]; then
       recoTo=${stores[$rd]}/$RESTDIR
     else
       echo "Aborting on user request."
@@ -196,10 +233,10 @@ function listNames() {
   echo "from an Ext3 file system - since the connection between the iNode (which"
   echo "holds the MetaData, including the file name) and the real data is dropped"
   echo "on deletion. However, we can obtain a list of names from the deleted files."
-  read -n 1 -p "Do you want to display a list of possible file names (y/n)? " ready
+  echo -n "Do you want to display a list of possible file names (y/n)? "
+  readyn
   echo
-  ready=`echo $ready|tr [:upper:] [:lower:]`
-  if [ "$ready" = "y" -o "$ready" = "j" ]; then
+  if [ $rd -eq 1 ]; then
     cmd="fls -r -d $recoFrom |grep -v '(realloc)'|grep 'r/r'"
     [ "$FILESPEC" != "everything" ] && cmd="$cmd |grep '.$FILESPEC'"
     echo
@@ -299,11 +336,11 @@ li1 "Prepared command:"
 echo "  $cmd"
 echo
 
-read -n 1 -p "Ready to go (y/n)? " ready
+echo -n "Ready to go (y/n)? "
+readyn
 echo
 echo
-ready=`echo $ready|tr [:upper:] [:lower:]`
-if [ "$ready" = "y" -o "$ready" = "j" ]; then
+if [ $rd -eq 1 ]; then
   echo "Please be patient - this may take some time (or even longer on large devices)..."
   echo
   $cmd

@@ -8,6 +8,7 @@ v0.1.1
 ! syntax error in gabi caused the script to always abort
 * made the messages in ralf a bit more clear
 + added support for wildcards to ralf
+* safeguarded user input (make sure we get numbers when needed, etc.)
 
 v0.1.0 (14.06.2008)
 -------------------

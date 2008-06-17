@@ -106,6 +106,42 @@ function syntax() {
   exit 0
 }
 
+#---------------------------------------------[ Read a number (user input) ]---
+# $1: Prompt message
+# opt $2: Min
+# opt $3: Max
+function readnum() {
+  read -p "$1" rd
+  local tn=`echo $rd|sed 's/[0-9]//g'`
+  local min=$2
+  local max=$3
+  [ -n "$tn" ] && {
+    echo "Please enter only digits!"
+    readnum "$1" "$2" "$3"
+  }
+  [ -z "$min" ] && min=0
+  [ -z "$max" ] && max=99999999
+  [ $rd -lt $min -o $rd -gt $max ] && {
+    echo "Please enter a number between $2 and $3!"
+    readnum "$1" "$2" "$3"
+  }
+}
+
+#---------------------------------------------------------[ Read Y/N input ]---
+function readyn() {
+  read -n 1 rd
+  echo
+  rd=`echo $rd|tr [:upper:] [:lower:]`
+  if [ "$rd" = "y" -o "$rd" = "j" ]; then
+    rd=1
+  elif [ "$rd" = "n" ]; then
+    rd=0
+  else
+    echo -n "Please enter 'y' for 'yes', 'n' for 'no' - or press Ctrl-C to abort: "
+    readyn
+  fi
+}
+
 #-------------------------------------------[ Select Destination directory ]---
 function selDest() {
   local rd
@@ -127,18 +163,18 @@ function selDest() {
     fi
   done<$MNTFILE
   rm -f $MNTFILE
-  read -p "Destination ID: " rd
+  readnum "Destination ID: " 1 $i
   if [ "${devs[$rd]}" = "$DEV" ]; then
     echo
     echo "Invalid selection: Source and Target file systems must not be identical!"
     echo "This way you may destroy your lost data permanently. Are you sure to"
-    read -n 1 -p "proceed (y/n)? " ready
+    echo -n "proceed (y/n)? "
+    readyn
     echo
-    ready=`echo $ready|tr [:upper:] [:lower:]`
-    if [ "$ready" = "y" -o "$ready" = "j" ]; then
+    if [ $rd -eq 1 ]; then
       recoTo=${stores[$rd]}/$RESTDIR
     else
-      echo -e "\nAborting on user request."
+      li1 "Aborting on user request."
       cleanUp
       exit 0
     fi
@@ -238,11 +274,10 @@ function recoForemost() {
 # $2: iNode#
 function fileRestore() {
   echo
-  echo "Found file '$MNT/$1' on iNode '$2'."
-  read -n 1 -p "Restore (y/n)? " ready
+  echo "Found file '$MNT/$1' on iNode '$2'. Restore (y/n)? "
+  readyn
   echo
-  ready=`echo $ready|tr [:upper:] [:lower:]`
-  if [ "$ready" = "y" -o "$ready" = "j" ]; then
+  if [ $rd -eq 1 ]; then
     mkfifo $TMP
     fsstat $DEV > $TMP &
     typeset -i min
