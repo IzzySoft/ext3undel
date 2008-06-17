@@ -242,12 +242,32 @@ function splitFileName() {
   li1 "Setting SearchString relative to mountpoint ('$SEARCH')"
 }
 
+#---------------------------------------------------[ Get PhotoRec Version ]---
+function photoRecVer() {
+  local TMP="${TMPDIR}/undel_xFIFO.$$"
+  mkfifo $TMP
+  photorec --help>$TMP &
+  while read line; do
+    local ver=`echo $line|awk '{print $2}'`
+    break
+  done<$TMP
+  pr_maj=${ver%.*}
+  pr_min=${ver#*.}
+  pr_min=${pr_min%,*}
+  rm -f $TMP
+}
+
 #--------------------------------------------------[ Restore with PhotoRec ]---
 function recoPhotoRec() {
-  li1 "Extracting file with PhotoRec..."
+  photoRecVer
+  li1 "Extracting file with PhotoRec v${pr_maj}.${pr_min}"
   cmd="photorec /d ${STORETO}/${RESTDIR} /cmd $DUMPFILE partition_i386"
   [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
-  cmd="${cmd},fileopt,all,enable,search"
+  if [ $pr_maj -gt 6 -o $pr_min -ge 9 ]; then
+    cmd="${cmd},fileopt,everything,enable,search"
+  else
+    cmd="${cmd},search"
+  fi
   li1 "Executing '$cmd'"
   eval $cmd
   rc=$?

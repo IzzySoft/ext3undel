@@ -9,6 +9,8 @@ v0.1.1
 * made the messages in ralf a bit more clear
 + added support for wildcards to ralf
 * safeguarded user input (make sure we get numbers when needed, etc.)
+* taking care for the changed cmd line with photoRec 6.9+ (new parameters) in
+  ralf (was already done in gabi)
 
 v0.1.0 (14.06.2008)
 -------------------
