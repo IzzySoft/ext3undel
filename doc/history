@@ -3,7 +3,7 @@ $Id$
 History for ext3undel
 =====================
 
-v0.1.1
+v0.1.1 (18.06.2008)
 -------------------
 ! syntax error in gabi caused the script to always abort
 * made the messages in ralf a bit more clear
