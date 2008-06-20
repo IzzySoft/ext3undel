@@ -7,6 +7,7 @@ v0.1.2
 -------------------
 + added configuration files - you no longer should edit the scripts themselves
 ! solved another little problem with the root mountpoint and iNode evaluation
+! if one element of the file path was a symlink, ralf did never find the iNode
 
 v0.1.1 (18.06.2008)
 -------------------

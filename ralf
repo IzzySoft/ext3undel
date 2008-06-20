@@ -240,6 +240,7 @@ function selSrc() {
   done <$MNTFILE
   rm -f $TMP
   rm -f $MNTFILE
+  li1 "Evaluated '$MNT' as corresponding mount point."
 }
 
 #--------------------------------------------[ Splitup filename for search ]---
@@ -250,6 +251,27 @@ function splitFileName() {
     SEARCH=${uFILE#$MNT/*}
   fi
   li1 "Setting SearchString relative to mountpoint ('$SEARCH')"
+}
+
+#-----------------------------------------------------[ Check for Symlinks ]---
+function symlinkCheck() {
+  local left="$uFILE"
+  local check=""
+  while [ -n "$left" ]; do
+    if [ -n "$right" ]; then
+      right="${left##*/}/${right}"
+    else
+      right="${left##*/}"
+    fi
+    left="${left%/*}"
+    [ -n "$left" ] && check=`readlink $left`
+    [ -n "$check" ] && {
+      uFILE="${check}/${right}"
+      left="$uFILE"
+      right=""
+    }
+  done
+  li1 "Real filename: '$uFILE'"
 }
 
 #---------------------------------------------------[ Get PhotoRec Version ]---
@@ -318,7 +340,7 @@ function recoForemost() {
 # $2: iNode#
 function fileRestore() {
   echo
-  echo "Found file '$MNT/$1' on iNode '$2'. Restore (y/n)? "
+  echo -n "Found file '$MNT/$1' on iNode '$2'. Restore (y/n)? "
   readyn
   echo
   if [ $rd -eq 1 ]; then
@@ -394,10 +416,12 @@ case "$1" in
   "-h"|"--help"|"-?") syntax;;
   *)
      set -f
+     echo
      fileName "$1"
      set +f
   ;;
 esac
+symlinkCheck
 selSrc
 [ -z "$DEV" ] && {
   echo
