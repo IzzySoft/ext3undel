@@ -1,0 +1,35 @@
+#!/bin/bash
+#==========================================================[ Configuration ]===
+# This is the configuration file for ext3undel. To be used by the scripts, it
+# must be located in either /etc/ext3undel/ext3undelrc or
+# $HOME/ext3undel/ext3undelrc
+# All statements are using bash syntax!
+
+#-------------------------------------------------[ File Systems and Paths ]---
+# We don't save anything in the TMPDIR - we just need a place where to create
+# named pipes
+TMPDIR=/tmp
+# Some named pipes for IPC
+MNTFILE=${TMPDIR}/undel_FIFO
+TMP=$TMPDIR/undel_FIFO2$$
+# directory name to recover to. Name is used relative to the target file systems
+# mount point - so no leading slash here (and no trailing slash either)!
+RESTDIR=recover
+
+#--------------------------------------------[ foremost / photoRec options ]---
+# Though we prefer to use PhotoRec, foremost is used as a fallback solution
+# if the PhotoRec executable cannot be found:
+USETS=1
+USEQUICK=1
+USEQUIET=0
+READONLY=0
+VERBOSE=1
+ALLHEAD=1
+
+# photorec is prefered over foremost - if found:
+# RECOPROG=foremost
+RECOPROG=photorec
+
+# one thing for both, PhotoRec AND foremost: default file type to restore
+FILESPEC="everything"
+

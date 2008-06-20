@@ -3,6 +3,11 @@ $Id$
 History for ext3undel
 =====================
 
+v0.1.2
+-------------------
++ added configuration files - you no longer should edit the scripts themselves
+! solved another little problem with the root mountpoint and iNode evaluation
+
 v0.1.1 (18.06.2008)
 -------------------
 ! syntax error in gabi caused the script to always abort

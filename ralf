@@ -14,6 +14,8 @@
 # $Id$
 
 #==========================================================[ Configuration ]===
+# Here we just setup the defaults - do not alter this, better check your
+# /etc/ext3undel/ext3undelrc and/or $HOME/.ext3undel/ext3undelrc
 #-------------------------------------------------[ File Systems and Paths ]---
 # We don't save anything in the TMPDIR - we just need a place where to create
 # named pipes
@@ -28,7 +30,7 @@ RESTDIR=recover
 #-------------------------------------------------------[ foremost options ]---
 # Though we prefer to use PhotoRec, foremost is used as a fallback solution
 # if the PhotoRec executable cannot be found:
-FILESPEC="all"
+FILESPEC="everything"
 USETS=0
 USEQUICK=1
 USEQUIET=1
@@ -39,6 +41,10 @@ ALLHEAD=1
 # photorec is prefered over foremost - if found. If you prefer foremost, set
 # RECOPROG=foremost
 RECOPROG=photorec
+
+#-----------------------------------------------[ Read configuration files ]---
+[ -e /etc/ext3undel/ext3undelrc ] && . /etc/ext3undel/ext3undelrc
+[ -e $HOME/.ext3undel/ext3undelrc ] && . $HOME/.ext3undel/ext3undelrc
 
 #===================================================[ Helper / SubRoutines ]===
 shopt -s extglob
@@ -238,7 +244,11 @@ function selSrc() {
 
 #--------------------------------------------[ Splitup filename for search ]---
 function splitFileName() {
-  SEARCH=${uFILE#$MNT/*}
+  if [ "$MNT" = "/" ]; then
+    SEARCH=${uFILE:1}
+  else
+    SEARCH=${uFILE#$MNT/*}
+  fi
   li1 "Setting SearchString relative to mountpoint ('$SEARCH')"
 }
 
@@ -264,9 +274,17 @@ function recoPhotoRec() {
   cmd="photorec /d ${STORETO}/${RESTDIR} /cmd $DUMPFILE partition_i386"
   [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
   if [ $pr_maj -gt 6 -o $pr_min -ge 9 ]; then
-    cmd="${cmd},fileopt,everything,enable,search"
+    if [ "$FILESPEC" = "everything" ]; then
+      cmd="${cmd},fileopt,everything,enable,search"
+    else
+      cmd="${cmd},fileopt,everything,disable,$FILESPEC,enable,search"
+    fi
   else
-    cmd="${cmd},search"
+    if [ "$FILESPEC" = "everything" ]; then
+      cmd="${cmd},search"
+    else
+      cmd="${cmd},fileopt,$FILESPEC,enable,search"
+    fi
   fi
   li1 "Executing '$cmd'"
   eval $cmd
@@ -283,7 +301,13 @@ function recoForemost() {
   [ $READONLY -eq 1 ] && cmd="$cmd -w"
   [ $VERBOSE -eq 1 ] && cmd="$cmd -v"
   [ $ALLHEAD -eq 1 ] && cmd="$cmd -a"
-  cmd="$cmd -t $FILESPEC -o ${STORETO}/$RESTDIR ${DUMPFILE} >/dev/null"
+  local FILEXT
+  if [ -z "$FILESPEC" -o "$FILESPEC" = "everything" ]; then
+    FILEXT="all";
+  else
+    FILEXT="$FILESPEC"
+  fi
+  cmd="$cmd -t $FILEXT -o ${STORETO}/$RESTDIR ${DUMPFILE} >/dev/null"
   li1 "Executing '$cmd'"
   eval $cmd
   rc=$?
