@@ -1,4 +1,4 @@
-.TH gabi 8 "13 June 2008"
+.TH gabi 8 "20 June 2008"
 .IX gabi
 .SH NAME
 G.A.B.I. - Get All Back Immediately - is a tool to undelete an (accidentally)
@@ -21,9 +21,11 @@ making sure the user selected a device different than this to store the
 recovered files to.
 
 .SH "CONFIGURATION"
-Some basic configuration can be done inside the script, where you will find the
-"[ Configuration ]" section at the top - together with a description on what
-they do.
+Some basic configuration can be done in /etc/ext3undel/ext3undelrc (or
+$HOME/.ext3undel/ext3undelrc, after copying the file there), where you will
+also find a description on what they do. G.A.B.I. first tries to read its
+configuration from the global configuration, and then overwrites them with
+the user specific ones (if found).
 
 .SH MESSAGES AND EXIT CALLS
 G.A.B.I. uses exit codes according to the Linux specifications (see
@@ -48,6 +50,8 @@ Except for those, error codes from other programs called (such as PhotoRec or
 foremost) are simply returned by the script as well.
 
 .SH "FILES"
+/etc/ext3undel/ext3undelrc
+
 /usr/bin/gabi
 
 /usr/share/doc/ext3undel/*

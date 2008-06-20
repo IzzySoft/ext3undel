@@ -108,7 +108,8 @@ for Ubuntu and most likely other Debian derivates), and finally simply run
 Alternatively, put the executables somewhere in your path, and optionally
 put the man pages to their locations, and you are done with the installation.
 
-Finally you may want to review/edit the settings at the top of the scripts, to
+Finally you may want to review/edit the settings in /etc/ext3undel/ext3undelrc
+(or copy that file to $HOME/.ext3undel/ext3undelrc and adjust it there), to
 see if they fit your requirements. This step is usually not necessary - but
 you may do so if you want to.
 

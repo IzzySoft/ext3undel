@@ -1,4 +1,4 @@
-.TH ralf 8 "12 June 2008"
+.TH ralf 8 "20 June 2008"
 .IX ralf
 .SH NAME
 R.A.L.F. - Recover A Lost File, a tool to undelete an (accidentally) deleted file
@@ -66,9 +66,11 @@ information, installed to the docs directory).
 Display some help (list syntax and available options) and exit.
 
 .SH "CONFIGURATION"
-Some basic configuration can be done inside the script, where you will find the
-"[ Configuration ]" section at the top - together with a description on what
-they do.
+Some basic configuration can be done in /etc/ext3undel/ext3undelrc (or
+$HOME/.ext3undel/ext3undelrc, after copying the file there), where you will
+also find a description on what they do. R.A.L.F. first tries to read its
+configuration from the global configuration, and then overwrites them with
+the user specific ones (if found).
 
 .SH MESSAGES AND EXIT CALLS
 R.A.L.F. uses exit codes according to the Linux specifications (see
@@ -95,6 +97,8 @@ Except for those, error codes from other programs called (such as PhotoRec or
 foremost) are simply returned by the script as well.
 
 .SH "FILES"
+/etc/ext3undel/ext3undelrc
+
 /usr/bin/ralf
 
 /usr/share/doc/ext3undel/*
