@@ -3,7 +3,7 @@ $Id$
 History for ext3undel
 =====================
 
-v0.1.2
+v0.1.2 (22.06.2008)
 -------------------
 + added configuration files - you no longer should edit the scripts themselves
 ! solved another little problem with the root mountpoint and iNode evaluation
