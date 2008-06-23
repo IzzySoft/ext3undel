@@ -251,6 +251,8 @@ function splitFileName() {
     SEARCH=${uFILE#$MNT/*}
   fi
   li1 "Setting SearchString relative to mountpoint ('$SEARCH')"
+  SEARCH=`echo "$SEARCH"|awk {'gsub("*",".*");gsub("?",".{1}");print $0}'`
+  li1 "Translating wildcards to RegExp ('$SEARCH')"
 }
 
 #-----------------------------------------------------[ Check for Symlinks ]---
@@ -455,7 +457,7 @@ done <$TMP
 rm -f $TMP
 i=0
 if [ ${#iNODE[*]} -eq 0 ]; then
-  li1 "Sorry - no match found in iNode list. Only chance left is G.A.B.I...."
+  li1 "No matching iNode found. Try the whole directory, or G.A.B.I. is your last chance."
 else
   while (( i < ${#iNODE[*]} )); do
     fileRestore ${iFILE[$i]} ${iNODE[$i]}
