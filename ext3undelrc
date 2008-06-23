@@ -16,6 +16,14 @@ TMP=$TMPDIR/undel_FIFO2$$
 # mount point - so no leading slash here (and no trailing slash either)!
 RESTDIR=recover
 
+#--------------------------------------------------------[ runtime options ]---
+# Suppress progress messages? Questions and problems will still be displayed
+# valid settings: 0|1
+SILENT=0
+# Output debug information?
+# valid settings: 0|1
+DEBUG=0
+
 #--------------------------------------------[ foremost / photoRec options ]---
 # Though we prefer to use PhotoRec, foremost is used as a fallback solution
 # if the PhotoRec executable cannot be found:

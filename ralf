@@ -14,22 +14,18 @@
 # $Id$
 
 #==========================================================[ Configuration ]===
-# Here we just setup the defaults - do not alter this, better check your
-# /etc/ext3undel/ext3undelrc and/or $HOME/.ext3undel/ext3undelrc
+# for explanation of the options, see ext3undelrc
 #-------------------------------------------------[ File Systems and Paths ]---
-# We don't save anything in the TMPDIR - we just need a place where to create
-# named pipes
 TMPDIR=/tmp
-# Some named pipes for IPC
 MNTFILE=${TMPDIR}/undel_FIFO
 TMP=$TMPDIR/undel_FIFO2$$
-# directory name to recover to. Name is used relative to the target file systems
-# mount point - so no leading slash here (and no trailing slash either)!
 RESTDIR=recover
 
+#--------------------------------------------------------[ runtime options ]---
+SILENT=0
+DEBUG=0
+
 #-------------------------------------------------------[ foremost options ]---
-# Though we prefer to use PhotoRec, foremost is used as a fallback solution
-# if the PhotoRec executable cannot be found:
 FILESPEC="everything"
 USETS=0
 USEQUICK=1
@@ -38,8 +34,6 @@ READONLY=0
 VERBOSE=1
 ALLHEAD=1
 
-# photorec is prefered over foremost - if found. If you prefer foremost, set
-# RECOPROG=foremost
 RECOPROG=photorec
 
 #-----------------------------------------------[ Read configuration files ]---
@@ -192,7 +186,12 @@ function selDest() {
 
 #--------------------------------------------------------[ Output progress ]---
 function li1() {
-  echo "* $1"
+  [ $SILENT -eq 0 ] && echo "* $1"
+}
+
+#-----------------------------------------------[ Output debug information ]---
+function debugMsg() {
+  [ $DEBUG -gt 0 ] && echo "# debug: $1"
 }
 
 #--------------------------------------------------------[ Verify filename ]---
@@ -310,7 +309,7 @@ function recoPhotoRec() {
       cmd="${cmd},fileopt,$FILESPEC,enable,search"
     fi
   fi
-  li1 "Executing '$cmd'"
+  debugMsg "Executing '$cmd'"
   eval $cmd
   rc=$?
 }
@@ -332,7 +331,7 @@ function recoForemost() {
     FILEXT="$FILESPEC"
   fi
   cmd="$cmd -t $FILEXT -o ${STORETO}/$RESTDIR ${DUMPFILE} >/dev/null"
-  li1 "Executing '$cmd'"
+  debugMsg "Executing '$cmd'"
   eval $cmd
   rc=$?
 }
@@ -397,7 +396,7 @@ function fileRestore() {
         fi
       fi
     done<$TMP
-    [ $range -eq 0 ] && li1 "Could not determine data block range - so no restore, sorry..."
+    [ $range -eq 0 ] && echo "Could not determine data block range - so no restore, sorry..."
   else
     echo "No Restore."
   fi
@@ -445,7 +444,7 @@ fi
 splitFileName
 li1 "Searching for iNode on '$DEV'..."
 mkfifo $TMP
-#echo "fls -r -d -p $DEV|grep -v '(realloc)'|grep 'r/r'|egrep '$SEARCH'"
+debugMsg "fls -r -d -p $DEV|grep -v '(realloc)'|grep 'r/r'|egrep '$SEARCH'"
 fls -r -d -p $DEV|grep -v "(realloc)"|grep "r/r"|egrep "$SEARCH">$TMP &
 typeset -i i=0
 while read line; do
@@ -457,7 +456,7 @@ done <$TMP
 rm -f $TMP
 i=0
 if [ ${#iNODE[*]} -eq 0 ]; then
-  li1 "No matching iNode found. Try the whole directory, or G.A.B.I. is your last chance."
+  echo "No matching iNode found. Try the whole directory, or G.A.B.I. is your last chance."
 else
   while (( i < ${#iNODE[*]} )); do
     fileRestore ${iFILE[$i]} ${iNODE[$i]}

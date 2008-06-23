@@ -15,21 +15,17 @@
 # $Id$
 
 #==========================================================[ Configuration ]===
-# Here we just setup the defaults - do not alter this, better check your
-# /etc/ext3undel/ext3undelrc and/or $HOME/.ext3undel/ext3undelrc
+# for explanation of the options, see ext3undelrc
 #-------------------------------------------------[ File Systems and Paths ]---
-# We don't save anything in the TMPDIR - we just need a place where to create
-# named pipes
 TMPDIR=/tmp
-# Some named pipes for IPC
 MNTFILE=${TMPDIR}/undel_FIFO
-# directory name to recover to. Name is used relative to the target file systems
-# mount point - so no leading slash here (and no trailing slash either)!
 RESTDIR=recover
 
+#--------------------------------------------------------[ runtime options ]---
+SILENT=0
+DEBUG=0
+
 #-------------------------------------------------------[ foremost options ]---
-# Though we prefer to use PhotoRec, foremost is used as a fallback solution
-# if the PhotoRec executable cannot be found:
 USETS=1
 USEQUICK=1
 USEQUIET=0
@@ -37,10 +33,7 @@ READONLY=0
 VERBOSE=1
 ALLHEAD=1
 
-# photorec is prefered over foremost - if found:
 RECOPROG=photorec
-
-# one thing for both, PhotoRec AND foremost: default file type to restore
 FILESPEC="everything"
 
 #-----------------------------------------------[ Read configuration files ]---
@@ -90,6 +83,16 @@ function syntax() {
   echo "  $0 [--help]"
   echo
   exit 0
+}
+
+#--------------------------------------------------------[ Output progress ]---
+function li1() {
+  [ $SILENT -eq 0 ] && echo "* $1"
+}
+
+#-----------------------------------------------[ Output debug information ]---
+function debugMsg() {
+  [ $DEBUG -gt 0 ] && echo "# debug: $1"
 }
 
 #-------------------------------------------[ Print header for Mount Table ]---
@@ -210,18 +213,15 @@ function selFSpec() {
   echo
 }
 
-#--------------------------------------------------------[ Output progress ]---
-function li1() {
-  echo "* $1"
-}
-
 #-----------------------------------------------[ Print yes/no for boolean ]---
 function printYN() {
-  if [ $2 -eq 1 ]; then
-    echo "$1: Yes"
-  else
-    echo "$1: No"
-  fi
+  [ $SILENT -eq 0 ] && {
+    if [ $2 -eq 1 ]; then
+      echo "$1: Yes"
+    else
+      echo "$1: No"
+    fi
+  }
 }
 
 #----------------------------------------------------------------[ CleanUp ]---
@@ -245,9 +245,9 @@ function listNames() {
   if [ $rd -eq 1 ]; then
     cmd="fls -r -d $recoFrom |grep -v '(realloc)'|grep 'r/r'"
     [ "$FILESPEC" != "everything" ] && cmd="$cmd |grep '.$FILESPEC'"
-    echo
-    echo "Running: $cmd"
-    echo
+    debugMsg ""
+    debugMsg "Running: $cmd"
+    debugMsg ""
     eval $cmd
   else
     echo "OK - skipping file list..."
