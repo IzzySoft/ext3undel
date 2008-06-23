@@ -1,0 +1,125 @@
+.TH "EXT3UNDEL.CONF" "5" "23 June 2008"
+.SH "NAME" 
+ext3undel.conf \- Configuration file for the \fBext3undel\fR scripts
+.SH "DESCRIPTION" 
+.PP 
+This manual page documents the options that can be set in the ext3undel.conf
+configuration file. For a description of what ext3undel does, see the
+ext3undel(8) manpage.
+
+.SH "SETTINGS" 
+.PP 
+The syntax of options is OPTION=value - Bash syntax, since it will be sourced
+by the ext3undel executables, which are written in Bash script.
+
+ext3undel first parses the /etc/ext3undel/ext3undel.conf, and after that, if
+found, the ~/.ext3undel/ext3undel.conf (which overwrites settings then). So in
+the first file you should define system-wide defaults - and your personal
+preferences as e.g. your projects should be defined in your personal config
+file. If you are the only user on the system, you could of course put all
+configuration to /etc/relman/relman.conf if you prefer, since you don't hurt
+anyone by that.
+
+.PP
+The following settings are available in ext3undel.conf:
+
+.SS "FILE SYSTEMS AND PATHS"
+First to say: The scripts are not creating any temporary files in the TMPDIR
+(since it could be on the partition you want to recover from, and we don't want
+the scripts to destroy what they should regain, do we?). They just need a place
+where to create named pipes.
+
+Usually there will be no need to change the pipes, but you may want to define
+a different directory for them.
+
+.IP "\fBTMPDIR\fR"
+The directory where to create the named pipes in. Default: /tmp
+
+.IP "\fBMNTFILE\fR"
+A named pipe used when parsing the mountpoint information. Default:
+${TMPDIR}/undel_FIFO
+
+.IP "\fBTMP\fR"
+An additional pipe needed here and there. Default: $TMPDIR/undel_FIFO2$$
+
+.IP "\fBRESTDIR\fR"
+Directory name to recover to. Name is used relative to the target file systems
+mount point - so no leading slash here (and no trailing slash either)!
+Default is "recover" (i.e., if you select the root ('/') mountpoint as
+restore target, the files will be found in "/recover").
+
+.SS "RUNTIME OPTIONS"
+These are options to control the behaviour of the scripts at runtime.
+
+.IP "\fBSILENT\fR"
+Whether to suppress progress messages. Questions and problems will still be
+displayed - regardless how you set this. Valid settings are 0 or 1, default
+is 0.
+
+.IP "\fBDEBUG\fR"
+Shall we output debug information? You will normally not need this, but in some
+cases it is really useful to track a problem. Valid settings are 0 or 1,
+default is 0.
+
+.SS "FOREMOST AND PHOTOREC OPTIONS"
+Though we prefer to use PhotoRec, foremost is used as a fallback solution if
+the PhotoRec executable cannot be found. So here are some options for foremost;
+valid settings are always either 0 or 1:
+
+.IP "\fBUSETS\fR"
+Whether to use timestamped directories. Setting this to 0, the \fBRESTDIR\fR
+will be treated literally - but then foremost will fail in case this directory
+already exists. Setting it to 1 (default) appends a timestamp to \fBRESTDIR\fR.
+
+.IP "\fBUSEQUICK\fR"
+Enables foremosts Quick recover mode (see the foremost man page / documentation
+for details). Valid settings are 0 or 1, default is 1.
+
+.IP "\fBUSEQUIET\fR"
+Tell foremost to "shut up" (1) or not (0, default).
+
+.IP "\fBREADONLY\fR"
+Whether foremost shall run in a "dry mode" (1) and recover nothing, but just
+display what it would do, or really do the job (0, default)
+
+.IP "\fBVERBOSE\fR"
+Cause foremost to talk as much as possible (1, default) or not (0).
+
+.IP "\fBALLHEAD\fR"
+Tell foremost to write all headers (see formost documentation on the "-a"
+parameter). Valid settings: 0 or 1, default 1.
+
+.P
+The following options apply to both, PhotoRec and foremost:
+
+.IP "\fBRECOPROG\fR"
+Set your favorite if both, foremost and PhotoRec are installed. By default,
+ext3undel first checks for PhotoRec and only then for foremost if PhotoRec
+is not found (RECOPROG=photorec). To direct it to always use foremost, set
+it to "RECOPROG=foremost"
+
+.IP "\fBFILESPEC\fR"
+One thing for both, PhotoRec AND foremost: default file type to restore. This is
+usually identical to the file extension (check the foremost / PhotoRec
+documentation for supported file formats). To recover all, set it to
+FILESPEC="everything" (default).
+
+.SH "SEE ALSO" 
+.PP 
+gabi(8)
+
+ralf(8)
+
+ext3undel(8)
+
+http://projects.izzysoft.de/trac/ext3undel (Project page)
+
+.SH "AUTHOR" 
+.PP 
+This manual page was written by Andreas Itzchak Rehberg (devel@izzysoft.de),
+the author of the program. Permission is granted to copy, distribute and/or
+modify this document under the terms of the GNU General Public License,
+Version 2.
+
+More information may be found on the authors website, http://www.izzysoft.de/
+ 

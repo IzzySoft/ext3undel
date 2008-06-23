@@ -22,6 +22,7 @@ install: installdirs
 	$(INSTALL_DATA) -c ext3undelrc $(DESTDIR)$(sysconfdir)
 	gzip man/*
 	$(INSTALL_DATA) -c man/*.8* $(DESTDIR)$(man8dir)
+	$(INSTALL_DATA) -c man/*.5* $(DESTDIR)$(man5dir)
 
 uninstall:
 	rm -f $(DESTDIR)$(bindir)/ralf
@@ -32,10 +33,12 @@ uninstall:
 	rm -f $(DESTDIR)$(man8dir)/ralf.*
 	rm -f $(DESTDIR)$(man8dir)/gabi.*
 	rm -f $(DESTDIR)$(man8dir)/ext3undel.*
+	rm -f $(DESTDIR)$(man5dir)/ext3undel.*
 
 installdirs:
 	# Generate all required target directories (due to DESTDIR, i.e. all)
 	mkdir -p $(DESTDIR)$(docdir)
 	mkdir -p $(DESTDIR)$(sysconfdir)
 	if [ ! -d $(DESTDIR)$(bindir) ]; then mkdir -p $(DESTDIR)$(bindir); fi
+	if [ ! -d $(DESTDIR)$(man5dir) ]; then mkdir -p $(DESTDIR)$(man5dir); fi
 	if [ ! -d $(DESTDIR)$(man8dir) ]; then mkdir -p $(DESTDIR)$(man8dir); fi

@@ -13,6 +13,7 @@ v0.1.3
   the deleted file was in, before recovering the entire disk. Hint added.
 + added new configuration parameters "DEBUG" and "SILENT", so you can tell
   the script how much it should "talk"
++ added manpage for the configuration file (use "man ext3undel.conf" to see)
 
 v0.1.2 (22.06.2008)
 -------------------
