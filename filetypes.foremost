@@ -1,0 +1,19 @@
+avi;AVI video files
+bmp;(Windows) bitmap graphic files
+cpp;C source code
+doc;MSWord (*.doc)
+exe;Windows PE binary (includes *.dll)
+gif;GIF graphic (Graphics Interchange Format)
+htm;HTML document (*.htm, *.html)
+jpg;JPEG graphic (including implementations used in modern digital cameras)
+mov;QuickTime video (*.mov)
+mpg;MPEG video (must begin with 0x000001BA)
+ole;MS OLE (PowerPoint, Word, Excel, Access, etc.)
+pdf;Adobe PDF (*.pdf)
+png;PNG graphic (Portable Network Graphics)
+rar;RAR archive (*.rar)
+riff;RIFF audio and AVI together (faster than running each separately)
+wav;Wave Audio (*.wav)
+wmv;Windows Media Video (*.wmv) and Audio (*.wma)
+zip;ZIP Archive (*.zip and *.jar), or Open Office document (they are zip’d XML)
+all;All file types known to foremost

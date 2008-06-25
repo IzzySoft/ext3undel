@@ -336,6 +336,37 @@ function recoForemost() {
   rc=$?
 }
 
+#----------------------------------------------------[ Obtain the FileType ]---
+function getFileType() {
+  local FEXT=`echo ${1##*.}|tr [:upper:] [:lower:]`
+  local EXT
+  local DESC
+  while read line; do
+    EXT=${line%%;*}
+    [ "$FEXT" != "$EXT" ] && continue
+    DESC=${line##*;}
+    break
+  done<filetypes.$RECOPROG
+  if [ -z "$DESC" ]; then
+    li1 "FileType '$FEXT' is unknown to $RECOPROG - so we let it check all it knows."
+    FILESPEC="everything"
+  else
+    echo "File has the extension '$EXT'. According to the list of known file types, it"
+    echo "probably is a '$DESC' file."
+    echo "Shall we handle it as such (y), or better check all other file types"
+    echo -n "as well (y/n)? "
+    readyn
+    echo
+    if [ $rd -eq 1 ]; then
+      FILESPEC="$EXT"
+      li1 "FileType set to '$EXT' ('$DESC')"
+    else
+      FILESPEC="everything"
+      li1 "FileType set to 'everything' (all that's supported)"
+    fi
+  fi
+}
+
 #------------------------------------------------[ Restore a file (or not) ]---
 # $1: filename (relative to mountpoint)
 # $2: iNode#
@@ -345,6 +376,7 @@ function fileRestore() {
   readyn
   echo
   if [ $rd -eq 1 ]; then
+    getFileType "$1"
     mkfifo $TMP
     fsstat $DEV > $TMP &
     typeset -i min

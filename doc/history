@@ -3,6 +3,14 @@ $Id$
 History for ext3undel
 =====================
 
+v0.1.4
+-------------------
++ ralf now checks the file extension to determine the file type to recover.
+  After user confirmation, it makes sure this type is included (photoRec <6.9)
+  of even restricts it to recover only files of this type (photoRec 6.9+ and
+  foremost) if confirmed - otherwise (or if the file type could not been
+  determined), recovery of all known file types will be done.
+
 v0.1.3 (25.06.2008)
 -------------------
 ! wildcard matching did not work as expected (tnx to Martintxo to point this

@@ -1,0 +1,221 @@
+3ds;*.3ds max
+3g2;3G mobile phone (CDMA)
+3gp;3G mobile phone (GSM)
+7z;7-Zip archive
+a;Unix/Linux archive
+ab;Mac Address Book
+accdb;Microsoft Access database (*.accdb)
+ace;ACE archive
+adr;Opera Hotlist
+ai;Adobe Illustrator
+aif;Apple audio
+albm;HP Photosmart Photo Printing Album
+all;Cubase Song
+amb;Licom AlphaCAM
+amd;AlphaCAM (*.amd)
+amr;Adaptive Multi-Rate (*.amr)
+amt;AlphaCAM (*.amt)
+arw;Sony raw image
+asm;Pro/ENGINEER Assembly
+asp;ASP script
+atd;AlphaCAM (*.atd)
+att;AlphaCAM (*.att)
+au;Sun/NeXT audio
+asf;ASF Video
+avi;AVI video
+bak;MS Backup (*.bak)
+bat;Batch (*.bat)
+bkf;MS Backup (*.bkf)
+blend;Blender
+bmp;(Windows) bitmap graphic
+bz2;bzip2 compressed
+c;C source
+cab;MS cabinet archive
+cam;*.cam image
+cda;CD Audio
+cdr;Corel Draw
+chm;Microsoft Windows HtmlHelp Data
+cls;Microsoft VB
+comicdoc;Comic Life
+cpr;Cubase Project
+cr2;Canon Raw 2 picture
+crw;Canon Raw picture
+ctg;Canon catalog
+cwk;AppleWorks
+dbf;DBase 3 (prone to false positive)
+dbx;Outlook Express
+dc;TSCe Survey Controller DC v10.0
+dcr;Kodak Raw picture
+deb;Debian package
+diskimage;SunPCI Disk Image
+djv;DjVu
+dll;Microsoft Dynamic Link Library
+doc;MSWord (*.doc)
+docx;Microsoft Office "Open" XML
+dpx;Cineon image/SMTPE DPX
+drw;Pro/ENGINEER Drawing
+ds2;Digital Speech Standard v2
+dsc;Nikon *.dsc
+dss;Digital Speech Standard
+dta;SPSS
+dump;Dump/Restore Archive
+dv;DIF Digital Video
+dwg;AutoCAD
+elf;Executable and Linking Format (Linux binary)
+emf;Windows Enhanced MetaFiles
+emlx;Mac OSX mail format
+eps;Encasulated PostScript
+evt;Windows registry header detection and Event Log (*.evt)
+exe;Windows PE binaries
+f;Fortran
+fcp;Final Cut Pro
+fcs;Flow Cytometry Standard 3.0
+fh10;MacroMedia Freehand 10
+fh5;MacroMedia Freehand 5
+fits;NASA Flexible Image Transport System
+fla;Flash Project
+flac;Free Lossless Audio Codec (*.flac)
+flv;Macromedia (*.flv)
+frm;MySQL table definition or Pro/ENGINEER Drawing Form (*.frm)
+fs;Zope data
+fst;QuickBook
+gho;Ghost
+gif;GIF graphic
+gpg;GPG/OpenPGP
+gsb;Grisbi - Personal Finance Manager XML data
+gz;gzip compressed
+h;C header
+html;HTML documents (*.htm, *.html)
+ics;vcalendar (*.ics)
+ifo;DVD Video manager or title set
+imb;Incredimail (*.imb)
+imm;Incredimail (*.imm)
+indd;Macromedia InDesign
+iso;cd/dvd iso image (ISO0660)
+itu;iTunes (*.itu)
+jng;JPEG Network Graphics
+jpg;JPEG graphic (including implementations used in modern digital cameras)
+jsp;JSP script
+kdb;KeepAssX
+lnk;Microsoft Windows Link
+m2t;Blu-ray MPEG-2
+m2ts;Blu-ray MPEG-2
+max;Paperport
+mb;Maya (*.mb)
+mdb;Microsoft Access database (*.mdb)
+mcd;VectorWorks
+mdf;Microsoft SQL Server Master Database File
+mfg;Pro/ENGINEER Manufacturing
+mid;MIDI
+mhbd;iTunes (*.mhbd)
+mkv;Matroska
+mng;Multiple-Image Network Graphics
+mov;QuickTime videos (*.mov)
+mp;Maya (*.mp)
+mp3;MPEG ADTS, layer III, v1 audio (*.mp3)
+mp4;MPEG 4 video
+mpg;MPEG video
+mrw;Minolta Raw picture
+msf;Mozilla "mork database"
+msg;Outlook message
+mus;Finale Music Score
+mws;MetaStock
+myi;MySQL MISAM compressed data
+nef;Nikon Raw picture
+njx;NJStar
+odd;OpenDocument Drawing
+odg;OpenDocument Graphics
+odp;OpenDocument Presentation
+ods;OpenDocument Spreadsheet
+odt;OpenDocument Text
+ogg;OGG Vorbis audio
+one;Microsoft OneNote
+orf;Olympus Raw Format picture
+paf;Personal Ancestral File
+pap;Papyrus word file
+pct;Macintosh Picture
+pcx;PCX graphics
+pdf;Adobe PDF (*.pdf)
+pef;Pentax Raw picture
+pfx;files holding PKCS#12 keys
+php;PHP script
+pl;Perl script
+png;PNG graphic (Portable Network Graphics)
+ppt;PowerPoint presentation (*.ppt)
+pptx;PowerPoint presentation (*.pptx, "Open" XML)
+prc;PalmOS application
+prt;Pro/ENGINEER Model
+ps;PostScript document
+psd;Adobe Photoshop Image
+pst;Outlook
+ptb;PowerTab
+pub;Microsoft Publisher
+py;Python script
+qbb;Quickbooks (*.qbb)
+qbw;Quickbooks (*.qbw)
+qdf;Quicken
+qxd;QuarkXpress Document (*.qxd)
+qxp;QuarkXpress Document (*.qxp)
+ra;Real Audio
+raf;Raw Fujifilm picture
+ram;Real Media
+rar;RAR archives (*.rar)
+raw;Contax picture, Panasonic/Leica picture
+rb;Ruby
+rdc;Rollei picture
+reg;MS registry config file
+res;Microsoft Visual Studio Resource
+rm;Real Media
+rns;Reason Audio
+rpm;RedHat Package
+rtf;Rich Text Format
+sav;SPSS (Statistical Package for the Social Sciences) saved data
+sda;StarDraw
+sdc;StarCalc
+sdd;StarImpress
+sdw;StarWriter
+sh;Shell script
+sit;Mikron
+skp;SketchUp
+slk;Sylk, Multiplan Symbolic Link Interchange
+spe;WinSpec
+sqlite;SQLite database
+spss;SPSS
+sr2;Sony Raw picture
+stl;Stereolithography CAD
+stp;Standard for the Exchange of Product model data
+swc;Macromedia Compressed Flash
+swf;MacroMedia Flash (Compiled)
+sxc;OpenOffice Spreadsheet
+sxd;OpenOffice Drawing
+sxi;OpenOffice Presentation
+sxw;OpenOffice Text Document
+tar;tar archive
+tex;LaTeX
+tib;Acronis True Image
+tif;Tag Image File Format (*.tif)
+tph;Pro/ENGINEER ToolPath
+txt;Text file
+vcf;VCard
+veg;Sony Vegas
+vis;Visio document
+vmdk;VMWare disk
+wab;Windows Address Book
+wav;Audio in Wave format (*.wav)
+wdb;Microsoft Works Database
+wk4;Lotus 1-2-3
+wks;Lotus 1-2-3
+wma;Windows Media Audi (*.wma)
+wmf;Windows Metafile
+wmv;Windows Media Video (*.wmv)
+wpd;Corel Documents
+wps;Microsoft Works
+x3f;Sigma/Foveon X3 raw picture
+xcf;GIMP XCF
+xlr;Microsoft Works Spreadsheet or Chart
+xls;Microsoft Excel
+xlsx;Microsoft Office "Open" XML Excel
+xm;FastTrackerII Extended Module
+xml;XML
+xsv;XBOX GTA San Andreas Save File
+zip;ZIP Archive (*.zip and *.jar) or Open Office Document (they are zip’d XML)
