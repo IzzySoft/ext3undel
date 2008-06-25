@@ -3,7 +3,7 @@ $Id$
 History for ext3undel
 =====================
 
-v0.1.3
+v0.1.3 (25.06.2008)
 -------------------
 ! wildcard matching did not work as expected (tnx to Martintxo to point this
   out). Now they should - as you would expect in the shell ("?" matching a
