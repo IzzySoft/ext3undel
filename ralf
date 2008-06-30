@@ -250,7 +250,7 @@ function splitFileName() {
     SEARCH=${uFILE#$MNT/*}
   fi
   li1 "Setting SearchString relative to mountpoint ('$SEARCH')"
-  SEARCH=`echo "$SEARCH"|awk {'gsub("*",".*");gsub("?",".{1}");print $0}'`
+  SEARCH=`echo "$SEARCH"|awk {'gsub("*",".*");gsub("?",".{1}");gsub("/","\\\/");print $0}'`
   li1 "Translating wildcards to RegExp ('$SEARCH')"
 }
 
@@ -367,16 +367,58 @@ function getFileType() {
   fi
 }
 
+#-------------------------------------------------[ Find iNode information ]---
+# $1: what to search (-d for deleted, -u for undeleted, "all" for all)
+# $2: "all" for no "r/r" restriction
+function getINode() {
+  case "$1" in
+    "all") FLS="fls -r -p $DEV|grep -v '(realloc)'|egrep '$SEARCH'";;
+    "-d"|"-u") FLS="fls -r $1 -p $DEV|grep -v '(realloc)'|grep 'r/r'|egrep '$SEARCH'";;
+  esac
+  mkfifo $TMP
+  debugMsg "$FLS"
+  eval $FLS>$TMP &
+  typeset -i i=0
+  while read line; do
+    if [ "$(echo $line|awk '{print $2}')" = "*" ]; then
+      iFILE[$i]=`echo "'$line '"|awk '{print $4}'`
+      iNODE[$i]=`echo "'$line'"|awk '{print $3}'`
+    else
+      iFILE[$i]=`echo "'$line '"|awk '{print $3}'`
+      iNODE[$i]=`echo "'$line'"|awk '{print $2}'`
+    fi
+    iNODE[$i]=${iNODE%*:}
+    i+=1
+  done <$TMP
+  debugMsg "Found ${#iNODE[*]} entries"
+  rm -f $TMP
+}
+
 #------------------------------------------------[ Restore a file (or not) ]---
 # $1: filename (relative to mountpoint)
 # $2: iNode#
+# $3: directory iNode substituted
 function fileRestore() {
+  if [ -n "$3" ]; then
+    local SUBST=$3
+  else
+    local SUBST=0
+  fi
+  if [ $SUBST -eq 0 ]; then
+    local NAM="file"
+  else
+    local NAM="substituted directory"
+  fi
   echo
-  echo -n "Found file '$MNT/$1' on iNode '$2'. Restore (y/n)? "
+  echo -n "Found $NAM '$MNT/$1' on iNode '$2'. Restore (y/n)? "
   readyn
-  echo
   if [ $rd -eq 1 ]; then
-    getFileType "$1"
+    echo
+    if [ $SUBST -eq 0 ]; then
+      getFileType "$1"
+    else
+      getFileType "$uFILE"
+    fi
     mkfifo $TMP
     fsstat $DEV > $TMP &
     typeset -i min
@@ -429,8 +471,6 @@ function fileRestore() {
       fi
     done<$TMP
     [ $range -eq 0 ] && echo "Could not determine data block range - so no restore, sorry..."
-  else
-    echo "No Restore."
   fi
 }
 
@@ -442,6 +482,7 @@ function cleanUp() {
 }
 
 #============================================================[ Do the job! ]===
+DIRECTHIT=1 # Hopefully we find the files iNode
 checkRoot
 checkBins
 [ -z "$1" ] && syntax
@@ -475,25 +516,30 @@ else
 fi
 splitFileName
 li1 "Searching for iNode on '$DEV'..."
-mkfifo $TMP
-debugMsg "fls -r -d -p $DEV|grep -v '(realloc)'|grep 'r/r'|egrep '$SEARCH'"
-fls -r -d -p $DEV|grep -v "(realloc)"|grep "r/r"|egrep "$SEARCH">$TMP &
-typeset -i i=0
-while read line; do
-  iNODE[$i]=`echo "'$line'"|awk '{print $3}'`
-  iNODE[$i]=${iNODE%*:}
-  iFILE[$i]=`echo "'$line '"|awk '{print $4}'`
-  i+=1
-done <$TMP
-rm -f $TMP
-i=0
+getINode "-d"
 if [ ${#iNODE[*]} -eq 0 ]; then
-  echo "No matching iNode found. Try the whole directory, or G.A.B.I. is your last chance."
+  DIRECTHIT=0
+  echo "No matching iNode found. Shall we try to substitute with the iNode of the"
+  echo -n "parent directory (y/n)? "
+  readyn
+  echo
+  if [ $rd -eq 1 ]; then
+    SEARCH=${SEARCH%\\*}
+    getINode "all"
+  fi
+fi
+if [ ${#iNODE[*]} -eq 0 ]; then
+  echo "No matching iNode found. Looks like G.A.B.I. is your last chance."
 else
-  while (( i < ${#iNODE[*]} )); do
-    fileRestore ${iFILE[$i]} ${iNODE[$i]}
-    i+=1
-  done
+  typeset -i i=0
+  if [ $DIRECTHIT -eq 1 ]; then
+    while (( i < ${#iNODE[*]} )); do
+      fileRestore "${iFILE[$i]}" ${iNODE[$i]} 0
+      i+=1
+    done
+  else # we substitute the directories iNode - so first hit only
+    fileRestore "${iFILE[0]}" ${iNODE[0]} 1
+  fi
 fi
 cleanUp
 exit 0
