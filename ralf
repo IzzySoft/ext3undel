@@ -99,9 +99,15 @@ function checkBins() {
 function syntax() {
   echo
   echo "Syntax:"
-  echo "  $0 <filename>"
+  echo "  ralf <filename> [options]"
   echo "where <filename> specifies the name of the file to restore - either"
   echo "relative to the current working directory, or with full (absolute) path."
+  echo
+  echo "Available options:"
+  echo "+d / --debug	Enable Debug Output"
+  echo "-d / --nodebug	Disable Debug Output"
+  echo "+s / --silent	Make output less verbose"
+  echo "-s / --nosilent	Display progress messages"
   echo
   exit 0
 }
@@ -474,6 +480,7 @@ function fileRestore() {
   fi
 }
 
+#------------------------------------------------[ cleanUp temporary stuff ]---
 function cleanUp() {
   li1 "Cleaning up..."
   echo
@@ -482,9 +489,11 @@ function cleanUp() {
 }
 
 #============================================================[ Do the job! ]===
+#---------------------------------------------------[ check pre-requisites ]---
 DIRECTHIT=1 # Hopefully we find the files iNode
 checkRoot
 checkBins
+#-----------------------------------------------------[ parse command line ]---
 [ -z "$1" ] && syntax
 case "$1" in
   "-h"|"--help"|"-?") syntax;;
@@ -495,6 +504,20 @@ case "$1" in
      set +f
   ;;
 esac
+shift
+while [ -n "$1" ]; do
+  case "$1" in
+    "+d"|"--debug")	DEBUG=1;;
+    "-d"|"--nodebug")	DEBUG=0;;
+    "+s"|"--silent")	SILENT=1;;
+    "-s"|"--nosilent")	SILENT=0;;
+  esac
+  shift
+done
+debugMsg "SILENT=${SILENT}"
+debugMsg "DEBUG=${DEBUG}"
+
+#----------------------------------------------------------[ check sources ]---
 symlinkCheck
 selSrc
 [ -z "$DEV" ] && {

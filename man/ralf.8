@@ -1,4 +1,4 @@
-.TH ralf 8 "20 June 2008"
+.TH ralf 8 "30 June 2008"
 .IX ralf
 .SH NAME
 R.A.L.F. - Recover A Lost File, a tool to undelete an (accidentally) deleted file
@@ -7,8 +7,20 @@ from ext2/ext3 file systems
 .SH SYNOPSIS
 .B ralf
 .RB \fIfileName\fR
+.RB \fI[ options ]\fR
 
 \fBralf --help\fR
+
+Available options:
+
+.RB [ \fI+d\fR ]
+.RB [ \fI--debug\fR ]
+.RB [ \fI-d\fR ]
+.RB [ \fI--nodebug\fR ]
+.RB [ \fI+s\fR ]
+.RB [ \fI--silent\fR ]
+.RB [ \fI-s\fR ]
+.RB [ \fI--nosilent\fR ]
 
 .SH DESCRIPTION
 R.A.L.F. is a wrapper to a collection of tools needed for successfully recovery
@@ -64,6 +76,26 @@ information, installed to the docs directory).
 .SH OPTIONS
 .IP \fB--help\fR
 Display some help (list syntax and available options) and exit.
+
+.IP \fB+d\fR
+.IP \fB--debug\fR
+Enable debug output. This is mainly used during development, but also useful to
+track errors to report
+
+.IP \fB-d\fR
+.IP \fB--nodebug\fR
+Disable debug output. You will usually not need this - unless you set \fIDEBUG=1\fR
+in your configuration file.
+
+.IP \fB+s\fR
+.IP \fB--silent\fR
+Make the script less verbose by disabling most of the progress messages. Questions
+will be asked, though, if your input is needed :)
+
+.IP \fB-s\fR
+.IP \fB--nosilent\fR
+Enable progress messages. You usually will not need this switch - unless you set
+\fISILENT=1\fR in your configuration.
 
 .SH "CONFIGURATION"
 Some basic configuration can be done in /etc/ext3undel/ext3undelrc (or
