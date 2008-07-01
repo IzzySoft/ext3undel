@@ -3,7 +3,7 @@ $Id$
 History for ext3undel
 =====================
 
-v0.1.4
+v0.1.4 (01.07.2008)
 -------------------
 + ralf now checks the file extension to determine the file type to recover.
   After user confirmation, it makes sure this type is included (photoRec <6.9)
