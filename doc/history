@@ -3,6 +3,13 @@ $Id$
 History for ext3undel
 =====================
 
+v0.1.5
+-------------------
+! PhotoRec version check failed for versions <6 (thanks to Christophe to point
+  this out and provide the fix)
+! when recovery failed, G.A.B.I. always said it was foremosts fault (even though
+  PhotoRec may have been used) - again thanks to Christophe
+
 v0.1.4 (01.07.2008)
 -------------------
 + ralf now checks the file extension to determine the file type to recover.

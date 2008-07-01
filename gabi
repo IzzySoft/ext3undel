@@ -353,7 +353,7 @@ if [ $rd -eq 1 ]; then
   rc=$?
   if [ $rc -ne 0 ]; then
     echo
-    echo "Looks like we had no success: foremost exited with code $rc, sorry..."
+    echo "Looks like we had no success: $RECOPROG exited with code $rc, sorry..."
     exit $rc
   else
     listNames

@@ -302,7 +302,7 @@ function recoPhotoRec() {
   li1 "Extracting file with PhotoRec v${pr_maj}.${pr_min}"
   cmd="photorec /d ${STORETO}/${RESTDIR} /cmd $DUMPFILE partition_i386"
   [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
-  if [ $pr_maj -gt 6 -o $pr_min -ge 9 ]; then
+  if [ $pr_maj -gt 6 -o $pr_maj -eq 6 -a $pr_min -ge 9 ]; then
     if [ "$FILESPEC" = "everything" ]; then
       cmd="${cmd},fileopt,everything,enable,search"
     else
