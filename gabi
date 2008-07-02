@@ -33,6 +33,9 @@ READONLY=0
 VERBOSE=1
 ALLHEAD=1
 
+#-------------------------------------------------------[ photorec options ]---
+WHOLESPACE=0
+
 RECOPROG=photorec
 FILESPEC="everything"
 
@@ -306,7 +309,12 @@ case "$RECOPROG" in
     li1 "Using PhotoRec v${pr_maj}.${pr_min}"
     cmd="photorec /d $recoTo /cmd $recoFrom partition_i386"
     [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
-    if [ $pr_maj -gt 6 -o $pr_min -ge 9 ]; then
+    if [ $pr_maj -gt 6 -o $pr_maj -eq 6 -a $pr_min -ge 9 ]; then
+      if [ $WHOLESPACE -eq 0 ]; then
+        cmd="${cmd},freespace"
+      else
+        cmd="${cmd},wholespace"
+      fi
       cmd="${cmd},fileopt"
       if [ "$FILESPEC" != "everything" ]; then
         cmd="${cmd},everything,disable,$FILESPEC,enable,search"

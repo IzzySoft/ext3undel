@@ -34,6 +34,9 @@ READONLY=0
 VERBOSE=1
 ALLHEAD=1
 
+#-------------------------------------------------------[ photorec options ]---
+WHOLESPACE=0
+
 RECOPROG=photorec
 
 #-----------------------------------------------[ Read configuration files ]---
@@ -108,6 +111,8 @@ function syntax() {
   echo "-d / --nodebug	Disable Debug Output"
   echo "+s / --silent	Make output less verbose"
   echo "-s / --nosilent	Display progress messages"
+  echo "--freespace	Recover from free space only"
+  echo "--wholespace	Recover from whole space"
   echo
   exit 0
 }
@@ -303,6 +308,11 @@ function recoPhotoRec() {
   cmd="photorec /d ${STORETO}/${RESTDIR} /cmd $DUMPFILE partition_i386"
   [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
   if [ $pr_maj -gt 6 -o $pr_maj -eq 6 -a $pr_min -ge 9 ]; then
+    if [ $WHOLESPACE -eq 0 ]; then
+      cmd="${cmd},freespace"
+    else
+      cmd="${cmd},wholespace"
+    fi
     if [ "$FILESPEC" = "everything" ]; then
       cmd="${cmd},fileopt,everything,enable,search"
     else
@@ -511,6 +521,8 @@ while [ -n "$1" ]; do
     "-d"|"--nodebug")	DEBUG=0;;
     "+s"|"--silent")	SILENT=1;;
     "-s"|"--nosilent")	SILENT=0;;
+    "--freespace")	WHOLESPACE=0;;
+    "--wholespace")	WHOLESPACE=1;;
   esac
   shift
 done

@@ -1,4 +1,4 @@
-.TH ralf 8 "30 June 2008"
+.TH ralf 8 "02 July 2008"
 .IX ralf
 .SH NAME
 R.A.L.F. - Recover A Lost File, a tool to undelete an (accidentally) deleted file
@@ -21,6 +21,8 @@ Available options:
 .RB [ \fI--silent\fR ]
 .RB [ \fI-s\fR ]
 .RB [ \fI--nosilent\fR ]
+.RB [ \fI--freespace\fR ]
+.RB [ \fI--wholespace\fR ]
 
 .SH DESCRIPTION
 R.A.L.F. is a wrapper to a collection of tools needed for successfully recovery
@@ -96,6 +98,14 @@ will be asked, though, if your input is needed :)
 .IP \fB--nosilent\fR
 Enable progress messages. You usually will not need this switch - unless you set
 \fISILENT=1\fR in your configuration.
+
+.IP \fB--freespace\fR
+Tell PhotoRec to recover only from free (currently unused) space. Has effect
+for PhotoRec 6.9+ only.
+
+.IP \fB--wholespace\fR
+Tell PhotoRec to recover from the entire (used and unused) space. This may also
+include files which are not (yet) deleted. Has effect for PhotoRec 6.9+ only.
 
 .SH "CONFIGURATION"
 Some basic configuration can be done in /etc/ext3undel/ext3undelrc (or

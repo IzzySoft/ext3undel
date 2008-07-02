@@ -9,6 +9,8 @@ v0.1.5
   this out and provide the fix)
 ! when recovery failed, G.A.B.I. always said it was foremosts fault (even though
   PhotoRec may have been used) - again thanks to Christophe
++ added support for PhotoRecs wholespace/freespace feature (see man pages for
+  details)
 
 v0.1.4 (01.07.2008)
 -------------------

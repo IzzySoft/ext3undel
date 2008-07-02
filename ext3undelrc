@@ -34,6 +34,10 @@ READONLY=0
 VERBOSE=1
 ALLHEAD=1
 
+#-------------------------------------------------------[ photorec options ]---
+# recover from whole partition (1) or free space only (0, default)
+WHOLESPACE=0
+
 # photorec is prefered over foremost - if found:
 # RECOPROG=foremost
 RECOPROG=photorec

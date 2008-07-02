@@ -1,4 +1,4 @@
-.TH "EXT3UNDEL.CONF" "5" "23 June 2008"
+.TH "EXT3UNDEL.CONF" "5" "02 July 2008"
 .SH "NAME" 
 ext3undel.conf \- Configuration file for the \fBext3undel\fR scripts
 .SH "DESCRIPTION" 
@@ -88,6 +88,11 @@ Cause foremost to talk as much as possible (1, default) or not (0).
 .IP "\fBALLHEAD\fR"
 Tell foremost to write all headers (see formost documentation on the "-a"
 parameter). Valid settings: 0 or 1, default 1.
+
+.IP "\fBWHOLESPACE\fR"
+Shall we recover from the whole partition (1) or from the free space only (0 -
+default)? Recovering from the whole partition may include undeleted files as
+well. This option will only have effect for PhotoRec 6.9+.
 
 .P
 The following options apply to both, PhotoRec and foremost:
