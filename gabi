@@ -88,6 +88,11 @@ function syntax() {
   exit 0
 }
 
+#-------------------------------[ Remove leading and trailing white spaces ]---
+function trim() {
+  echo "$1"|sed 's/^\s*//;s/\s*$//'
+}
+
 #--------------------------------------------------------[ Output progress ]---
 function li1() {
   [ $SILENT -eq 0 ] && echo "* $1"
