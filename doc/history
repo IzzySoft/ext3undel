@@ -3,7 +3,7 @@ $Id$
 History for ext3undel
 =====================
 
-v0.1.5
+v0.1.5 (11.07.2008)
 -------------------
 ! PhotoRec version check failed for versions <6 (thanks to Christophe to point
   this out and provide the fix)
