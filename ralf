@@ -117,6 +117,11 @@ function syntax() {
   exit 0
 }
 
+#-------------------------------[ Remove leading and trailing white spaces ]---
+function trim() {
+  echo "$1"|sed 's/^\s*//;s/\s*$//'
+}
+
 #---------------------------------------------[ Read a number (user input) ]---
 # $1: Prompt message
 # opt $2: Min
@@ -163,9 +168,24 @@ function selDest() {
   printf "%2s| %-7s| %-15s| %-32s| %-16s\n" "ID" "Type" "Device" "MountPoint" "Size"
   echo "--+--------+----------------+---------------------------------+----------------"
   typeset -i i=0
+  local uLINE=""
+  local SKIP=1
   mkfifo $MNTFILE
   df -h -l -T >$MNTFILE &
   while read line; do
+    [ $SKIP -eq 1 ] && { # skip the header
+      SKIP=0
+      continue
+    }
+    if [ -n "$(trim "$uLINE")" ]; then # wrapped line continued
+      line="${uLINE} $line"
+    else
+      [ -z "$(trim "`echo $line|awk '{print $7}'`" )" ] && { # line wrapped?
+        uLINE="$line"
+	continue
+      }
+    fi
+    uLINE=""
     if [[ "$line" == /dev* ]]; then # skip pseudo filesystems
       i+=1
       devs[$i]=`echo $line|awk '{print $1}'`
@@ -220,10 +240,25 @@ function selSrc() {
   local mid
   typeset -i i=0
   mounts[0]=""
-  mkfifo $MNTFILE
+  local uLINE=""
+  local SKIP=1
   mkfifo $TMP
+  mkfifo $MNTFILE
   df -h -l -T >$MNTFILE &
   while read line; do
+    [ $SKIP -eq 1 ] && { # skip the header
+      SKIP=0
+      continue
+    }
+    if [ -n "$(trim "$uLINE")" ]; then # wrapped line continued
+      line="${uLINE} $line"
+    else
+      [ -z "$(trim "`echo $line|awk '{print $7}'`" )" ] && { # line wrapped?
+        uLINE="$line"
+	continue
+      }
+    fi
+    uLINE=""
     if [[ "$line" == /dev* ]]; then # skip pseudo filesystems
       echo $line|awk '{print $7}'>>$TMP &
       uDEV[$i]=`echo $line|awk '{print $1}'`
@@ -298,6 +333,7 @@ function photoRecVer() {
   pr_maj=${ver%.*}
   pr_min=${ver#*.}
   pr_min=${pr_min%,*}
+  [ "$pr_min" != "${pr_min%-*}" ] && let pr_min=${pr_min%-*}-1
   rm -f $TMP
 }
 

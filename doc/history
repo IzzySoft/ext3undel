@@ -11,6 +11,10 @@ v0.1.5
   PhotoRec may have been used) - again thanks to Christophe
 + added support for PhotoRecs wholespace/freespace feature (see man pages for
   details)
+! mount points have not been detected correctly if their "device path" was too
+  long (and thus caused wrapped lines in df output)
+! using a "WIP" version of PhotoRec (e.g. 6.10-WIP), the scripts failed at the
+  version check (minor version '10-WIP' not numeric)
 
 v0.1.4 (01.07.2008)
 -------------------
