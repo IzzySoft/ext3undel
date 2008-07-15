@@ -274,7 +274,7 @@ function listNames() {
   [ $FLS -eq 0 ] && return
   echo
   echo "Unfortunately, we cannot automatically obtain the name of a deleted file"
-  echo "from an Ext3 file system - since the connection between the iNode (which"
+  echo "from Unix file systems - since the connection between the iNode (which"
   echo "holds the MetaData, including the file name) and the real data is dropped"
   echo "on deletion. However, we can obtain a list of names from the deleted files."
   echo -n "Do you want to display a list of possible file names (y/n)? "

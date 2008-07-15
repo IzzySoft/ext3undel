@@ -6,6 +6,7 @@ History for ext3undel
 v0.1.6
 -------------------
 ! source partition selection in gabi was missed to fix
+* added warning to ralf if source file system is not ext2/ext3
 
 v0.1.5 (11.07.2008)
 -------------------

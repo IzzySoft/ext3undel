@@ -285,7 +285,8 @@ function selSrc() {
   done <$MNTFILE
   rm -f $TMP
   rm -f $MNTFILE
-  li1 "Evaluated '$MNT' as corresponding mount point."
+  li1 "Evaluated '$MNT' as corresponding mount point, using '$FSTYPE' file system."
+  [ "$FSTYPE" != "ext2" -a "$FSTYPE" != "ext3" ] && echo "! WARNING: This is not an ext2/ext3 file system, so our algorithm may fail!"
 }
 
 #--------------------------------------------[ Splitup filename for search ]---
