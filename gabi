@@ -346,16 +346,16 @@ case "$RECOPROG" in
     cmd="photorec /d $recoTo /cmd $recoFrom partition_i386"
     [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
     if [ $pr_maj -gt 6 -o $pr_maj -eq 6 -a $pr_min -ge 9 ]; then
-      if [ $WHOLESPACE -eq 0 ]; then
-        cmd="${cmd},freespace"
-      else
-        cmd="${cmd},wholespace"
-      fi
       cmd="${cmd},fileopt"
       if [ "$FILESPEC" != "everything" ]; then
         cmd="${cmd},everything,disable,$FILESPEC,enable,search"
       else
         cmd="${cmd},everything,enable,search"
+      fi
+      if [ $WHOLESPACE -eq 0 ]; then
+        cmd="${cmd},freespace"
+      else
+        cmd="${cmd},wholespace"
       fi
     else
       [ "$FILESPEC" != "everything" ] && cmd="${cmd},fileopt,$FILESPEC,enable"

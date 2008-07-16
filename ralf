@@ -345,15 +345,15 @@ function recoPhotoRec() {
   cmd="photorec /d ${STORETO}/${RESTDIR} /cmd $DUMPFILE partition_i386"
   [ "$FSTYPE" = "ext3" -o "$FSTYPE" = "ext2" ] && cmd="${cmd},options,mode_ext2"
   if [ $pr_maj -gt 6 -o $pr_maj -eq 6 -a $pr_min -ge 9 ]; then
-    if [ $WHOLESPACE -eq 0 ]; then
-      cmd="${cmd},freespace"
-    else
-      cmd="${cmd},wholespace"
-    fi
     if [ "$FILESPEC" = "everything" ]; then
       cmd="${cmd},fileopt,everything,enable,search"
     else
       cmd="${cmd},fileopt,everything,disable,$FILESPEC,enable,search"
+    fi
+    if [ $WHOLESPACE -eq 0 ]; then
+      cmd="${cmd},freespace"
+    else
+      cmd="${cmd},wholespace"
     fi
   else
     if [ "$FILESPEC" = "everything" ]; then
