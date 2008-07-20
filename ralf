@@ -394,12 +394,20 @@ function getFileType() {
   local FEXT=`echo ${1##*.}|tr [:upper:] [:lower:]`
   local EXT
   local DESC
+  local FTLIST="filetypes.${RECOPROG}"
+  if [ -f /etc/ext3undel/$FTLIST ]; then
+    FTLIST="/etc/ext3undel/$FTLIST"
+  elif [ -f $HOME/.ext3undel/$FTLIST ]; then
+    FTLIST="$HOME/.ext3undel/$FTLIST"
+  elif [ -f ${0%/*}/$FTLIST ]; then
+    FTLIST="${0%/*}/$FTLIST"
+  fi
   while read line; do
     EXT=${line%%;*}
     [ "$FEXT" != "$EXT" ] && continue
     DESC=${line##*;}
     break
-  done<filetypes.$RECOPROG
+  done<$FTLIST
   if [ -z "$DESC" ]; then
     li1 "FileType '$FEXT' is unknown to $RECOPROG - so we let it check all it knows."
     FILESPEC="everything"

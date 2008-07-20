@@ -8,6 +8,7 @@ v0.1.6
 ! source partition selection in gabi was missed to fix
 * added warning to ralf if source file system is not ext2/ext3
 ! fixed a little problem with photorecs freespace/wholespace parameter
+! filetypes.* have neither been correctly installed nor referenced
 
 v0.1.5 (11.07.2008)
 -------------------

@@ -19,7 +19,7 @@ man8dir=$(mandir)/man8
 install: installdirs
 	$(INSTALL) -c ralf gabi ext3undel $(DESTDIR)$(bindir)
 	$(INSTALL_DATA) -c doc/* $(DESTDIR)$(docdir)
-	$(INSTALL_DATA) -c ext3undelrc $(DESTDIR)$(sysconfdir)
+	$(INSTALL_DATA) -c ext3undelrc filetypes.* $(DESTDIR)$(sysconfdir)
 	gzip man/*
 	$(INSTALL_DATA) -c man/*.8* $(DESTDIR)$(man8dir)
 	$(INSTALL_DATA) -c man/*.5* $(DESTDIR)$(man5dir)
