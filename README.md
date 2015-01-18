@@ -46,9 +46,12 @@ destruction before the recovery has been done.
 
 ## Where to find more details?
 Check the `doc/` sub-directory of this project for the original documentation,
-and also take a look at the man pages stored in `man/`.
+and also take a look at the man pages stored in `man/`. Additionally, there's
+the documentation in the [wiki of the old project page][1], available in English
+and German.
 
 
 [PhotoRec]: http://www.cgsecurity.org/wiki/PhotoRec "PhotoRec at CGSecurity"
 [foremost]: http://en.wikipedia.org/wiki/Foremost_%28software%29 "Wikipedia: Foremost (software)"
 [Sleuthkit]: http://www.sleuthkit.org/ "The Sleuth Kit"
+[1]: http://projects.izzysoft.de/trac/ext3undel/wiki/ "ext3undel wiki at IzzySoft.DE"
