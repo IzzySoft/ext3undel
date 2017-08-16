@@ -47,11 +47,20 @@ destruction before the recovery has been done.
 ## Where to find more details?
 Check the `doc/` sub-directory of this project for the original documentation,
 and also take a look at the man pages stored in `man/`. Additionally, there's
-the documentation in the [wiki of the old project page][1], available in English
-and German.
+the documentation in the [wiki][1].
+
+
+## Other Sources and references
+* [Why Recovering a Deleted Ext3 File Is Difficult](http://linux.sys-con.com/node/117909): Background information
+* [How to Recover Deleted Files from Ext3 Partitions](http://www.theavidcoder.com/index.php?option=com_content&view=article&id=1:how-to-recover-deleted-files-from-ext3-partitions&catid=1:linuxfilerecovery&Itemid=3): Backgrounds explained
+* Read about ext3undel on [Linux.com](http://www.linux.com/feature/141074)
+* Another review can be found at [ramfree17.net](http://ramfree17.net/capsule/?p=151)
+* Same article in [Japanese](http://www.itmedia.co.jp/enterprise/articles/0807/15/news020.html)
+* Leggere [in italiano](http://www.programmazione.it/index.php?entity=eitem&idItem=39777) / [Español](http://www.alcancelibre.org/article.php/20080716103850678)
+* Ein deutschsprachiger Artikel findet sich [hier](http://www.linux-community.de/story?storyid=26096)
 
 
 [PhotoRec]: http://www.cgsecurity.org/wiki/PhotoRec "PhotoRec at CGSecurity"
 [foremost]: http://en.wikipedia.org/wiki/Foremost_%28software%29 "Wikipedia: Foremost (software)"
 [Sleuthkit]: http://www.sleuthkit.org/ "The Sleuth Kit"
-[1]: http://projects.izzysoft.de/trac/ext3undel/wiki/ "ext3undel wiki at IzzySoft.DE"
+[1]: https://github.com/IzzySoft/ext3undel/wiki "ext3undel wiki"
